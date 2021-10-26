@@ -4,7 +4,7 @@ import pandas as pd
 import re
 from Bio import SeqIO
 
-# new dataframe  create 2 columns identfier and description column
+# new dataframe  create 3 columns identfier, description, and Sequence column
 df = pd.DataFrame(columns=['Identifier', 'Description', "Sequence"])
 
 
