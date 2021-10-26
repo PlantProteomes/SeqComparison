@@ -9,7 +9,7 @@ with open(filename) as infile:
     print(f"INFO: Reading {filename}")
     for record in SeqIO.parse(infile, 'fasta'):
         sequence = str(record.seq)
-        match = re.match(r'^(.+?)\s+(.*)$', record.description)
+        match = re.match(r'^(\S+)\s*(.*)$', record.description)
         if match:
             identifier = match.group(1)
             description = match.group(2)
