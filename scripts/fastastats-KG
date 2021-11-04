@@ -3,6 +3,34 @@
 import pandas as pd
 import re
 from Bio import SeqIO
+import argparse
+
+# Create the parser
+my_parser = argparse.ArgumentParser(description='List the content of fasta file(mitochondrion)')
+
+# Add the arguments
+my_parser.add_argument('Distinct_identifer',
+                       metavar='identifier_distinct',
+                       type=str,
+                       help='no.of distinct identifiers in file')
+                       
+                
+my_parser.add_argument('Distinct_Sequences',
+                       metavar='sequences_distinct',
+                       type=str,
+                       help='no.of distinct Sequences in file')
+
+
+my_parser.add_argument('Total_Entries',
+                       metavar='entries_total',
+                       type=str,
+                       help='no.of total in file')
+
+
+# Execute the parse_args() method
+args = my_parser.parse_args()
+
+input_path = args.Distinct_Identifier
 
 # new dataframe  create 3 columns identfier, description, and Sequence column
 df = pd.DataFrame(columns=['Identifier', 'Description', "Sequence"])
