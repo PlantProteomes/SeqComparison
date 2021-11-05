@@ -1,0 +1,23 @@
+
+python fasta_stats.py ../proteomes/maize/original/mitochondrion.2.fasta
+
+There are 163 entries
+There are 149 distinct sequences. There are 14 redundant sequences
+There are 163 distinct identifiers. There are 0 redundant  identifiers
+There are 156 distinct descriptions. There are 7 redundant descriptions
+
+python fasta_stats.py ../proteomes/maize/original/plastid.2.fasta
+There are 111 entries
+There are 92 distinct sequences. There are 19 redundant sequences
+There are 111 distinct identifiers. There are 0 redundant  identifiers
+There are 105 distinct descriptions. There are 6 redundant descriptions
+
+
+python fasta_stats.py ../proteomes/maize/original/Zm-B73-REFERENCE-NAM-5.0_Zm00001eb.1.protein.2.fa
+There are 72539 entries
+There are 62559 distinct sequences. There are 9980 redundant sequences
+There are 72539 distinct identifiers. There are 0 redundant  identifiers
+There are 1 distinct descriptions. There are 72538 redundant descriptions
+
+
+
