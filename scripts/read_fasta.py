@@ -2,8 +2,13 @@
 
 import re
 from Bio import SeqIO
+import argparse
 
-filename = '../proteomes/maize/original/mitochondrion.2.fasta'
+argparser = argparse.ArgumentParser(description='Parse a FASTA file')
+argparser.add_argument('files', type=str, nargs='+', help='Filename of the FASTA file to read')
+params = argparser.parse_args()
+
+filename = params.files[0]
 with open(filename) as infile:
 
     print(f"INFO: Reading {filename}")
