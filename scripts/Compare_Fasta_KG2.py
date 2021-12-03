@@ -8,7 +8,73 @@ import argparse
 
 class FastaStats:
 
-    argparser = argparse.ArgumentParser(description='description of program')
+    def __init__(self):
+        self.entry_counter = 0
+        self.stats = {}
+        for data_type in ['identifiers', 'sequences', 'descriptions']:
+            self.stats[data_type] = {
+                'n_redundant_entries': 0,
+                'nonredundant_entries': {}
+            }
+
+    # this function updates count of redundant identifiers
+    def add_datum(self, data_type, value):
+        if value in self.stats[data_type]['nonredundant_entries']:
+            self.stats[data_type]['n_redundant_entries'] += 1
+            self.stats[data_type]['nonredundant_entries'][value] += 1
+        else:
+            self.stats[data_type]['nonredundant_entries'][value] = 1
+
+    def read(self, filename):
+
+        # this will open specified file
+        with open(filename) as infile:
+
+            print(f"INFO: Reading {filename}")
+
+            # parses through records line by line
+            for record in SeqIO.parse(infile, 'fasta'):
+                sequence = str(record.seq)
+                self.entry_counter += 1
+
+                # this line separates the identifier and the description into 2 groups by the space
+                # record is a fasta object
+                match = re.match(r'^(\S+)\s*(.*)$', record.description)
+                if match:  # if this line can be separated and parsed this way
+                    identifier = match.group(1)
+                    description = match.group(2)
+
+                    self.add_datum('identifiers', identifier)
+                    self.add_datum('sequences', sequence)
+
+                else:
+                    print(
+                        f"ERROR: Unable to parse description line: {record.description}")
+                    exit()
+
+                #if self.entry_counter > 3:
+                #    print(json.dumps(self.stats, indent=2, sort_keys=True))
+                #    exit()
+
+    def print_stats(self):
+
+        # printing out stats collected
+        print('')
+        print("There is a total of", self.entry_counter, "entries.")
+        print("There are", len(
+            self.stats['identifiers']['nonredundant_entries']), "unique identifiers.")
+        print("There are", len(
+            self.stats['sequences']['nonredundant_entries']), "unique sequences.")
+        print("There are", self.stats['identifiers']
+                ['n_redundant_entries'], "redundant identifiers.")
+        print("There are", self.stats['sequences']
+                ['n_redundant_entries'], "redundant sequences.")
+
+
+
+
+##########################################################################
+def main():
 
     # Add the arguments
     argparser = argparse.ArgumentParser(
@@ -24,82 +90,22 @@ class FastaStats:
     argparser.add_argument('files', type=str, nargs='+',
                            help='Filename of the FASTA file to read')
 
-    params = argparser.parse_args()
-    # Execute the parse_args() method
     args = argparser.parse_args()
-    input_path = args.Stat_test
-    input_execute = args.run
-    # Constructor
+    print(args.show_duplicate_sequences)
 
-    if input_execute == "run":
-        def __init__(self):
-            self.entry_counter = 0
-            self.stats = {}
-            for data_type in ['identifiers', 'sequences', 'descriptions']:
-                self.stats[data_type] = {
-                    'n_redundant_entries': 0,
-                    'nonredundant_entries': {}
-                }
+    file1_fasta_stats = FastaStats()
+    filename = args.files[0]
+    file1_fasta_stats.read(filename)
+    file1_fasta_stats.print_stats()
 
-        # this function updates count of redundant identifiers
-        def add_datum(self, data_type, value):
-            if value in self.stats[data_type]['nonredundant_entries']:
-                self.stats[data_type]['n_redundant_entries'] += 1
-                self.stats[data_type]['nonredundant_entries'][value] += 1
-            else:
-                self.stats[data_type]['nonredundant_entries'][value] = 1
+    file2_fasta_stats = FastaStats()
+    filename = args.files[1]
+    file2_fasta_stats.read(filename)
+    file2_fasta_stats.print_stats()
 
-        def read(self, filename):
 
-            # this will open specified file
-            with open(filename) as infile:
 
-                print(f"INFO: Reading {filename}")
 
-                # parses through records line by line
-                for record in SeqIO.parse(infile, 'fasta'):
-                    sequence = str(record.seq)
-                    self.entry_counter += 1
+if __name__ == "__main__":
+    main()
 
-                    # this line separates the identifier and the description into 2 groups by the space
-                    # record is a fasta object
-                    match = re.match(r'^(\S+)\s*(.*)$', record.description)
-                    if match:  # if this line can be separated and parsed this way
-                        identifier = match.group(1)
-                        description = match.group(2)
-
-                        self.add_datum('identifiers', identifier)
-                        self.add_datum('sequences', sequence)
-
-                    else:
-                        print(
-                            f"ERROR: Unable to parse description line: {record.description}")
-                        exit()
-
-                    if self.entry_counter > 3:
-                        print(json.dumps(self.stats, indent=2, sort_keys=True))
-                        exit()
-
-    ##########################################################################
-    if input_path == "files":
-        # total number of entries within the file
-
-        file1_fasta_stats = FastaStats()
-        filename = r'../proteomes/maize/original/mitochondrion.2.fasta'
-        file1_fasta_stats.read(filename)
-
-        file2_fasta_stats = FastaStats()
-        filename = r'../proteomes/maize/original/plastid.2.fasta'
-        file2_fasta_stats.read(filename)
-
-        # printing out stats collected
-        print('')
-        print("There is a total of", fasta_stats.entry_counter, "entries.")
-        print("There are", len(
-            fasta_stats.stats['identifiers']['nonredundant_entries']), "unique identifiers.")
-        print("There are", len(
-            fasta_stats.stats['sequences']['nonredundant_entries']), "unique sequences.")
-        print("There are", fasta_stats.stats['identifiers']
-              ['n_redundant_entries'], "redundant identifiers.")
-        print("There are", fasta_stats.stats['sequences']
-              ['n_redundant_entries'], "redundant sequences.")
