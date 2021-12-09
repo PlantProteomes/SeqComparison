@@ -2,6 +2,7 @@
 
 import re #refers to regular expressions module
 from Bio import SeqIO
+import json
 
 class FastaStats:
 
@@ -9,7 +10,7 @@ class FastaStats:
     def __init__(self):
         self.entry_counter = 0
         self.stats = {}
-        for data_type in [ 'identifiers', 'sequences' ]:
+        for data_type in [ 'identifiers', 'sequences', 'descriptions' ]:
             self.stats[data_type] = {
                 'n_redundant_entries': 0,
                 'nonredundant_entries': {}
@@ -19,8 +20,9 @@ class FastaStats:
     def add_datum(self, data_type, value):
         if value in self.stats[data_type]['nonredundant_entries']:
             self.stats[data_type]['n_redundant_entries'] += 1
+            self.stats[data_type]['nonredundant_entries'][value] += 1
         else:
-            self.stats[data_type]['nonredundant_entries'][value] = True
+            self.stats[data_type]['nonredundant_entries'][value] = 1
 
 
     def read(self, filename):
@@ -48,13 +50,23 @@ class FastaStats:
                     print(f"ERROR: Unable to parse description line: {record.description}")
                     exit()
 
+                if self.entry_counter > 3:
+                    print(json.dumps(self.stats, indent=2, sort_keys=True))
+                    exit()
+
 
 ##########################################################################
 def main():
 
-    fasta_stats = FastaStats()
+    file1_fasta_stats = FastaStats()
     filename = '../proteomes/maize/original/mitochondrion.2.fasta'
-    fasta_stats.read(filename)
+    file1_fasta_stats.read(filename)
+
+    file2_fasta_stats = FastaStats()
+    filename = '../proteomes/maize/original/mitochondrion.2.fasta'
+    file2_fasta_stats.read(filename)
+
+
 
     #printing out stats collected
     print('')
