@@ -52,7 +52,7 @@ class FastaStats:
                         f"ERROR: Unable to parse description line: {record.description}")
                     exit()
 
-                #if self.entry_counter > 3:
+                # if self.entry_counter > 3:
                 #    print(json.dumps(self.stats, indent=2, sort_keys=True))
                 #    exit()
 
@@ -66,14 +66,20 @@ class FastaStats:
         print("There are", len(
             self.stats['sequences']['nonredundant_entries']), "unique sequences.")
         print("There are", self.stats['identifiers']
-                ['n_redundant_entries'], "redundant identifiers.")
+              ['n_redundant_entries'], "redundant identifiers.")
         print("There are", self.stats['sequences']
-                ['n_redundant_entries'], "redundant sequences.")
+              ['n_redundant_entries'], "redundant sequences.")
 
-
-
+    def compare_stats(self, self2):
+        common_pairs = dict()
+        for key in self:
+            if (key in self2 and self[key] == self2[key]):
+                common_pairs[key] = self[key]
+                print(common_pairs)
 
 ##########################################################################
+
+
 def main():
 
     # Add the arguments
@@ -103,9 +109,9 @@ def main():
     file2_fasta_stats.read(filename)
     file2_fasta_stats.print_stats()
 
-
+    file1_fasta_stats.compare_stats(
+        file1_fasta_stats.self, file2_fasta_stats.self)
 
 
 if __name__ == "__main__":
     main()
-
