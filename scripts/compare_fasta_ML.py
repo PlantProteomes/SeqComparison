@@ -137,9 +137,10 @@ def main():
     # file2_fasta_stats.print_stats()
 
     ##### SEQ COMPARISON #####
-    # these two lines confirm how many
+    # these two lines confirm stats for each file (will be printed)
     file1_fasta_stats.file_stats(file1_fasta_stats.sequences, "sequences")
     file2_fasta_stats.file_stats(file2_fasta_stats.sequences, "sequences")
+    # this line does the comparing of unique sequences (will be printed)
     file1_fasta_stats.compare(
         file1_fasta_stats.distseq, file2_fasta_stats.distseq, "sequences")
 
