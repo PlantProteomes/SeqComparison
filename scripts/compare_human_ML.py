@@ -3,16 +3,14 @@ import re
 from Bio import SeqIO
 
 
-class Compare_fasta:
+class Compare_Hseq:
     
     def __init__(self):
         self.identifiers = [] # total number of identifiers
         self.sequences = [] # total number of sequences
         self.distid = [] # distinct identifiers
         self.distseq = [] # distinct sequences
-
-  
-
+    
     # reads given file, separate identifiers, sequences, and descriptions, and store
     # this info into a compare object
     def read(self, filename):
@@ -69,11 +67,10 @@ class Compare_fasta:
         print("There is a total of " + str(total) + " " + type + ", " + str(num_redund) +
               " " + "redundancies, and " + str(num_dist) + " distinct " + type + ".")
 
-
-# takes unique i/s from each file (obtained from calling file states) and 
-# finds overlapping (shared b/w two files) i/s also returns a set of overlapping 
-# identifiers. So the next function can determine of the overlapping ones, 
-# how many have the same sequences
+    # takes unique i/s from each file (obtained from calling file states) and 
+    # finds overlapping (shared b/w two files) i/s also returns a set of overlapping 
+    # identifiers. So the next function can determine of the overlapping ones, 
+    # how many have the same sequences
     def compare(self, list1, list2, type):
         num_overlap = 0  # counts overlap of i/s
         overlap = set()  # list of overlapping id. will be returned
@@ -88,26 +85,7 @@ class Compare_fasta:
               num_overlap) + " unique " + type + ".")
         print("There are " + str(num_overlap) + " overlapping " + type + ".")
         
-        #test code
-        for item in overlap:
-            print(item)
         return overlap
-
-
-# determines of the overlapping identifiers, how many sequenses are unique and how
-# many overlap
-    def compare_seq(self, id1, id2, seq1, seq2, overlap_id):
-        overlap = 0
-        for item in overlap_id:
-            # search for index of overlapping id and then use this index
-            # to compare corresponding sequences.
-            index1 = id1.index(item)
-            index2 = id2.index(item)
-            if seq1[index1] == seq2[index2]:
-                overlap += 1
-        print("Of the overlapping identifiers, " +
-              str(overlap) + " have the same sequences.")
-
 
 ##########################################################################
 def main():
@@ -130,12 +108,12 @@ def main():
     # prints none when didn't provide dup seq command
     print(args.show_duplicate_sequences)
 
-    file1_fasta_stats = Compare_fasta()
+    file1_fasta_stats = Compare_Hseq()
     filename = args.files[0]
     file1_fasta_stats.read(filename)
     # file1_fasta_stats.print_stats()
 
-    file2_fasta_stats = Compare_fasta()
+    file2_fasta_stats = Compare_Hseq()
     filename = args.files[1]
     file2_fasta_stats.read(filename)
     # file2_fasta_stats.print_stats()
@@ -147,7 +125,6 @@ def main():
     # this line does the comparing of unique sequences (will be printed)
     file1_fasta_stats.compare(
         file1_fasta_stats.distseq, file2_fasta_stats.distseq, "sequences")
-
 
 if __name__ == "__main__":
     main()
