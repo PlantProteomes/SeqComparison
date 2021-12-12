@@ -4,7 +4,6 @@ from Bio import SeqIO
 
 
 class Compare_Hseq:
-    
     def __init__(self):
         self.identifiers = [] # total number of identifiers
         self.sequences = [] # total number of sequences
