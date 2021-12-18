@@ -85,7 +85,7 @@ class Compare_fasta:
                 overlap.add(item)
 
         print("There are " + str(len(list1) + len(list2) -
-              num_overlap) + " unique " + type + ".")
+              num_overlap * 2) + " unique " + type + ".")
         print("There are " + str(num_overlap) + " overlapping " + type + ".")
         
         #test code
