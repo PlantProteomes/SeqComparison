@@ -107,10 +107,13 @@ def main():
     file1_fasta_stats = Compare_fasta()
     filename = args.files[0]
     file1_fasta_stats.read(filename)
+    print("Comparing\n"+
+    filename + "\nwith")
 
     file2_fasta_stats = Compare_fasta()
     filename = args.files[1]
     file2_fasta_stats.read(filename)
+    print(filename)
 
     ##### SEQ COMPARISON #####
     # these two lines confirm stats for each file 
