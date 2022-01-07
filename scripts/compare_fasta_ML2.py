@@ -82,7 +82,6 @@ class Compare_fasta:
         
         return overlap
 
-
 ##########################################################################
 def main():
 
@@ -104,13 +103,14 @@ def main():
     # prints none when didn't provide dup seq command
     print(args.show_duplicate_sequences)
 
-    file1_fasta_stats = Compare_fasta()
+    file1_fasta_stats = Compare_fasta() # create object for one file
     filename = args.files[0]
     file1_fasta_stats.read(filename)
+
     print("Comparing\n"+
     filename + "\nwith")
 
-    file2_fasta_stats = Compare_fasta()
+    file2_fasta_stats = Compare_fasta() #create object for second file
     filename = args.files[1]
     file2_fasta_stats.read(filename)
     print(filename)
@@ -121,7 +121,6 @@ def main():
     file2_fasta_stats.file_stats(file2_fasta_stats.sequences, "sequences")
     # this line does the comparing of unique sequences
     file1_fasta_stats.compare(file1_fasta_stats.sequences, file2_fasta_stats.sequences, "sequences")
-
 
 if __name__ == "__main__":
     main()
