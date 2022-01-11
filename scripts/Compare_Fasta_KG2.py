@@ -9,13 +9,14 @@ import argparse
 class FastaStats:
 
     def __init__(self):
-        self.entry_counter = 0
-        self.stats = {}
         for data_type in ['identifiers', 'sequences', 'descriptions']:
             self.stats[data_type] = {
                 'n_redundant_entries': 0,
                 'nonredundant_entries': {}
             }
+
+            self.entry_counter = 0
+            self.stats = {}
 
     # this function updates count of redundant identifiers
     def add_datum(self, data_type, value):
@@ -70,12 +71,31 @@ class FastaStats:
         print("There are", self.stats['sequences']
               ['n_redundant_entries'], "redundant sequences.")
 
-    def compare_stats(self, self2):
+    def compare_stats_sequences(self, obj1, obj2):
         common_pairs = dict()
-        for key in self:
-            if (key in self2 and self[key] == self2[key]):
-                common_pairs[key] = self[key]
-                print(common_pairs)
+        for key in obj1.stats['sequences']['nonredundant_entries']:
+            if key in obj1.stats['sequences']['nonredundant_entries']:
+                common_pairs[key] = obj1[key]
+
+        print("There are", common_pairs.len(), "same sequences")\
+
+
+    def compare_stats_descriptions(self, obj1, obj2):
+        common_pairs = dict()
+        for key in obj1.stats['descriptions']['nonredundant_descriptions']:
+            if key in obj1.stats['descriptions']['nonredundant_descriptions']:
+                common_pairs[key] = obj1[key]
+
+        print("There are", common_pairs.len(), "same descriptions")
+
+    def compare_stats_identifiers(self, obj1, obj2):
+        common_pairs = dict()
+        for key in obj1.stats['identifiers']['nonredundant_identifiers']:
+            if key in obj1.stats['identifiers']['nonredundant_identifiers']:
+                common_pairs[key] = obj1[key]
+
+        print("There are", common_pairs.len(), "same identifiers")
+
 
 ##########################################################################
 
@@ -109,8 +129,8 @@ def main():
     file2_fasta_stats.read(filename)
     file2_fasta_stats.print_stats()
 
-    file1_fasta_stats.compare_stats(
-        file1_fasta_stats.self, file2_fasta_stats.self)
+    file1_fasta_stats.compare_stats_sequences(
+        file1_fasta_stats, file2_fasta_stats)
 
 
 if __name__ == "__main__":
