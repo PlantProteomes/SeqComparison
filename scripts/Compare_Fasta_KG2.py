@@ -48,15 +48,12 @@ class FastaStats:
 
                     self.add_datum('identifiers', identifier)
                     self.add_datum('sequences', sequence)
+                    self.add_datum('descriptions', sequence)
 
                 else:
                     print(
                         f"ERROR: Unable to parse description line: {record.description}")
                     exit()
-
-                # if self.entry_counter > 3:
-                #    print(json.dumps(self.stats, indent=2, sort_keys=True))
-                #    exit()
 
     def print_stats(self):
 
@@ -67,35 +64,23 @@ class FastaStats:
             self.stats['identifiers']['nonredundant_entries']), "unique identifiers.")
         print("There are", len(
             self.stats['sequences']['nonredundant_entries']), "unique sequences.")
+        print("There are", len(
+            self.stats['descriptions']['nonredundant_entries']), "unique descriptions.")
         print("There are", self.stats['identifiers']
               ['n_redundant_entries'], "redundant identifiers.")
         print("There are", self.stats['sequences']
               ['n_redundant_entries'], "redundant sequences.")
+        print("There are", self.stats['descriptions']
+              ['n_redundant_entries'], "redundant descriptions.")
 
-    def compare_stats_sequences(self, obj1, obj2):
+    def compare_stats(self, obj1, obj2, data_type):
         common_pairs = dict()
-        for key in obj1['sequences']['nonredundant_entries']:
-            if key in obj1['sequences']['nonredundant_entries']:
-                common_pairs[key] = obj1[key]
+        for key in obj1.stats[data_type]['nonredundant_entries']:
+            if key in obj2.stats[data_type]['nonredundant_entries']:
+                common_pairs[key] = True
 
-        print("There are", common_pairs.len(), "same sequences")\
-
-
-    def compare_stats_descriptions(self, obj1, obj2):
-        common_pairs = dict()
-        for key in obj1.stats['descriptions']['nonredundant_descriptions']:
-            if key in obj1.stats['descriptions']['nonredundant_descriptions']:
-                common_pairs[key] = obj1[key]
-
-        print("There are", common_pairs.len(), "same descriptions")
-
-    def compare_stats_identifiers(self, obj1, obj2):
-        common_pairs = dict()
-        for key in obj1.stats['identifiers']['nonredundant_identifiers']:
-            if key in obj1.stats['identifiers']['nonredundant_identifiers']:
-                common_pairs[key] = obj1[key]
-
-        print("There are", common_pairs.len(), "same identifiers")
+        print("There are", len(common_pairs), "same",
+              data_type, "between the 2 files")
 
 
 ##########################################################################
@@ -130,9 +115,12 @@ def main():
     file2_fasta_stats.read(filename_b)
     file2_fasta_stats.print_stats()
 
-    file1_fasta_stats.compare_stats_sequences(filename_a, filename_b)
-    file1_fasta_stats.compare_stats_descriptions(filename_a, filename_b)
-    file1_fasta_stats.compare_stats_identifiers(filename_a, filename_b)
+    file1_fasta_stats.compare_stats(
+        file1_fasta_stats, file2_fasta_stats, "sequences")
+    file1_fasta_stats.compare_stats(
+        file1_fasta_stats, file2_fasta_stats, "descriptions")
+    file1_fasta_stats.compare_stats(
+        file1_fasta_stats, file2_fasta_stats, "identifiers")
 
 
 if __name__ == "__main__":
