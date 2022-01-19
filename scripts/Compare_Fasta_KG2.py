@@ -9,6 +9,7 @@ import argparse
 class FastaStats:
 
     def __init__(self):
+
         self.entry_counter = 0
         self.stats = {}
         for data_type in ['identifiers', 'sequences', 'descriptions']:
@@ -18,6 +19,7 @@ class FastaStats:
             }
 
     # this function updates count of redundant identifiers
+
     def add_datum(self, data_type, value):
         if value in self.stats[data_type]['nonredundant_entries']:
             self.stats[data_type]['n_redundant_entries'] += 1
@@ -46,15 +48,12 @@ class FastaStats:
 
                     self.add_datum('identifiers', identifier)
                     self.add_datum('sequences', sequence)
+                    self.add_datum('descriptions', sequence)
 
                 else:
                     print(
                         f"ERROR: Unable to parse description line: {record.description}")
                     exit()
-
-                # if self.entry_counter > 3:
-                #    print(json.dumps(self.stats, indent=2, sort_keys=True))
-                #    exit()
 
     def print_stats(self):
 
@@ -65,17 +64,24 @@ class FastaStats:
             self.stats['identifiers']['nonredundant_entries']), "unique identifiers.")
         print("There are", len(
             self.stats['sequences']['nonredundant_entries']), "unique sequences.")
+        print("There are", len(
+            self.stats['descriptions']['nonredundant_entries']), "unique descriptions.")
         print("There are", self.stats['identifiers']
               ['n_redundant_entries'], "redundant identifiers.")
         print("There are", self.stats['sequences']
               ['n_redundant_entries'], "redundant sequences.")
+        print("There are", self.stats['descriptions']
+              ['n_redundant_entries'], "redundant descriptions.")
 
-    def compare_stats(self, self2):
+    def compare_stats(self, obj1, obj2, data_type):
         common_pairs = dict()
-        for key in self:
-            if (key in self2 and self[key] == self2[key]):
-                common_pairs[key] = self[key]
-                print(common_pairs)
+        for key in obj1.stats[data_type]['nonredundant_entries']:
+            if key in obj2.stats[data_type]['nonredundant_entries']:
+                common_pairs[key] = True
+
+        print("There are", len(common_pairs), "same",
+              data_type, "between the 2 files")
+
 
 ##########################################################################
 
@@ -100,17 +106,21 @@ def main():
     print(args.show_duplicate_sequences)
 
     file1_fasta_stats = FastaStats()
-    filename = args.files[0]
-    file1_fasta_stats.read(filename)
+    filename_a = args.files[0]
+    file1_fasta_stats.read(filename_a)
     file1_fasta_stats.print_stats()
 
     file2_fasta_stats = FastaStats()
-    filename = args.files[1]
-    file2_fasta_stats.read(filename)
+    filename_b = args.files[1]
+    file2_fasta_stats.read(filename_b)
     file2_fasta_stats.print_stats()
 
     file1_fasta_stats.compare_stats(
-        file1_fasta_stats.self, file2_fasta_stats.self)
+        file1_fasta_stats, file2_fasta_stats, "sequences")
+    file1_fasta_stats.compare_stats(
+        file1_fasta_stats, file2_fasta_stats, "descriptions")
+    file1_fasta_stats.compare_stats(
+        file1_fasta_stats, file2_fasta_stats, "identifiers")
 
 
 if __name__ == "__main__":
