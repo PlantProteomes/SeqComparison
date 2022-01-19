@@ -8,6 +8,7 @@ import pandas as pd
 
 
 class FastaStats:
+    df_final = pd.DataFrame
 
     def __init__(self):
 
@@ -74,7 +75,8 @@ class FastaStats:
         print("There are", self.stats['descriptions']
               ['n_redundant_entries'], "redundant descriptions.")
         df = pd.DataFrame(self.stats)
-        print(df)
+        update_pandas = FastaStats()
+        update_pandas.df_final.append(df)
 
     def compare_stats(self, obj1, obj2, data_type):
         common_pairs = dict()
@@ -126,6 +128,9 @@ def main():
         file1_fasta_stats, file2_fasta_stats, "descriptions")
     file1_fasta_stats.compare_stats(
         file1_fasta_stats, file2_fasta_stats, "identifiers")
+
+    final_pandas = FastaStats()
+    print(final_pandas.df_final)
 
 
 if __name__ == "__main__":
