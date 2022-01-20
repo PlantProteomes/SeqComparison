@@ -5,6 +5,7 @@
 import re
 from Bio import SeqIO
 import numpy as np
+import argparse
 
 
 class Matrix:
@@ -15,6 +16,9 @@ class Matrix:
     def __init__(self):
         self.identifiers = {}  # dictionary of ident with keys as ident and values as count
         self.sequences = {}  # dictionary of seq with keys as seq and values as count
+
+        self.split_files = [] # list of Titles and filenames to process
+
 
     # reads given file, separate identifiers and sequences and store
     # this info into a compare object
@@ -85,7 +89,23 @@ class Matrix:
             self.leg_names.append(short)
             print( short + " - " + self.filenames[i])
 
-         
+
+    # Parse the list of files from the user into Title=Filename
+    def parse_files_argument(self, files):
+        print("Parsing input title=filename arguments")
+        split_files = []
+        for title_file in files:
+            try:
+                title,filename = title_file.split('=')
+            except:
+                print(f"ERROR: Parameter '{title_file}' should have the format TITLE=FILENAME (e.g. Mito=mitochondria.2.fasta)")
+                exit(1)
+            split_file = { 'title': title, 'filename': filename }
+            print(split_file)
+            split_files.append( split_file )
+        print('')
+        return split_files
+
 
 # creates a matrix used to store overlapping sequences of different
 # fasta files, total sequences, distinct sequences, and unique sequences
@@ -94,14 +114,20 @@ class Matrix:
 
         # create unique first row with filenames and specs
         first_row = ["Source", "Sequences", "Distinct", "Unique"]
-        first_row.extend(self.leg_names) 
+        titles = []
+        for file_entry in self.split_files:
+            titles.append(file_entry['title'])
+        first_row.extend(titles) 
         matrix.append(first_row)
 
         # updates the matrix with 0 as placeholders and first column
-        for i in range(0, self.COUNT):
-            row = [0] * (self.COUNT + 4)
-            row[0] = self.leg_names[i]
+        nfiles = len(titles)
+        for i in range(0, nfiles):
+            row = [0] * (nfiles + 4)
+            row[0] = titles[i]
             matrix.append(row)
+
+        print("Matix template:")
         print(np.matrix(matrix))
 
 
@@ -154,8 +180,8 @@ def main():
     args = argparser.parse_args()
 
     master_table = Matrix()
-    split_files = master_table.parse_files_argument()
-    master_table.create_matrix(split_files)
+    master_table.split_files = master_table.parse_files_argument(args.files)
+    master_table.create_matrix()
 
     return
     
