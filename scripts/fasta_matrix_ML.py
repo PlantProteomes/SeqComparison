@@ -136,10 +136,7 @@ class Matrix:
 ##########################################################################
 
 def main():
-    test = Matrix()
-    test.legend()
-    test.create_matrix()
-'''
+
     # Add the arguments
     argparser = argparse.ArgumentParser(
         description='Construct matrice of overlapping ident/seq from FASTA files')
@@ -152,12 +149,16 @@ def main():
     argparser.add_argument('--show_total_reads', action='count',
                            help='If set, print the total number of rows in the input file')
     argparser.add_argument('files', type=str, nargs='+',
-                           help='Filename of the FASTA file to read')
+                           help='Two or more FASTA files to compare, using notation Title=filename')
 
     args = argparser.parse_args()
-    # prints none when didn't provide dup seq command
-    print(args.show_duplicate_sequences)
 
+    master_table = Matrix()
+    split_files = master_table.parse_files_argument()
+    master_table.create_matrix(split_files)
+
+    return
+    
     file1_fasta_stats = Matrix()  # create object for one file
     filename = args.files[0]
     file1_fasta_stats.read(filename)
@@ -165,7 +166,7 @@ def main():
     file2_fasta_stats = Matrix()  # create object for second file
     filename = args.files[1]
     file2_fasta_stats.read(filename)
-'''
+
 
 if __name__ == "__main__":
     main()
