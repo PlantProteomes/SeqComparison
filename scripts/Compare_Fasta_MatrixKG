@@ -1,6 +1,10 @@
 #!/bin/env python3
 
-import re  # refers to regular expressions module
+from fileinput import filename
+import re
+from tabnanny import filename_only
+from tkinter.tix import COLUMN
+from typing import Sequence  # refers to regular expressions module
 from Bio import SeqIO
 import json
 import argparse
@@ -8,16 +12,17 @@ import pandas as pd
 
 
 class FastaStats:
-    df_final = pd.DataFrame
 
     def __init__(self):
 
         self.entry_counter = 0
         self.stats = {}
+        self.df_final = pd.DataFrame(columns=["Source", "Sequences", "Unique"])
         for data_type in ['identifiers', 'sequences', 'descriptions']:
             self.stats[data_type] = {
                 'n_redundant_entries': 0,
                 'nonredundant_entries': {}
+
             }
 
     # this function updates count of redundant identifiers
@@ -51,6 +56,8 @@ class FastaStats:
                     self.add_datum('identifiers', identifier)
                     self.add_datum('sequences', sequence)
                     self.add_datum('descriptions', sequence)
+                    self.df_final.append(Source=str(filename))
+                    self.df_final.insert(str(filename))
 
                 else:
                     print(
@@ -74,15 +81,17 @@ class FastaStats:
               ['n_redundant_entries'], "redundant sequences.")
         print("There are", self.stats['descriptions']
               ['n_redundant_entries'], "redundant descriptions.")
-        df = pd.DataFrame(self.stats)
-        update_pandas = FastaStats()
-        update_pandas.df_final.append(df)
+
+        self.df_final.append(Sequence=str(len(
+            self.stats['sequences']['nonredundant_entries']), "unique sequences."))
 
     def compare_stats(self, obj1, obj2, data_type):
         common_pairs = dict()
         for key in obj1.stats[data_type]['nonredundant_entries']:
             if key in obj2.stats[data_type]['nonredundant_entries']:
                 common_pairs[key] = True
+
+       # self.df_final.append((len(common_pairs))
 
         print("There are", len(common_pairs), "same",
               data_type, "between the 2 files")
