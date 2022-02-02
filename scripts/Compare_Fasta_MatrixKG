@@ -18,6 +18,8 @@ class FastaStats:
         self.entry_counter = 0
         self.stats = {}
         self.df_final = pd.DataFrame(columns=["Source", "Sequences", "Unique"])
+        self.split_files = []
+        self.filename = []
         for data_type in ['identifiers', 'sequences', 'descriptions']:
             self.stats[data_type] = {
                 'n_redundant_entries': 0,
@@ -56,8 +58,6 @@ class FastaStats:
                     self.add_datum('identifiers', identifier)
                     self.add_datum('sequences', sequence)
                     self.add_datum('descriptions', sequence)
-                    self.df_final.append(Source=str(filename))
-                    self.df_final.insert(str(filename))
 
                 else:
                     print(
@@ -82,8 +82,8 @@ class FastaStats:
         print("There are", self.stats['descriptions']
               ['n_redundant_entries'], "redundant descriptions.")
 
-        self.df_final.append(Sequence=str(len(
-            self.stats['sequences']['nonredundant_entries']), "unique sequences."))
+        return [self.entry_counter, len(
+            self.stats['sequences']['nonredundant_entries'])]
 
     def compare_stats(self, obj1, obj2, data_type):
         common_pairs = dict()
@@ -95,6 +95,29 @@ class FastaStats:
 
         print("There are", len(common_pairs), "same",
               data_type, "between the 2 files")
+
+    def parse_files_argument(self, files):
+        print("Parsing input title=filename arguments")
+
+        self.split_files = []
+        for title_file in files:
+            try:
+                title, filename = title_file.split('=')
+            except:
+                print(
+                    f"ERROR: Parameter '{title_file}' should have the format TITLE=FILENAME (e.g. Mito=mitochondria.2.fasta)")
+                exit(1)
+            split_file = {'title': title, 'filename': filename}
+            splitfile_merge_columns = pd.DataFrame(columns=[title])
+            self.split_files.append(split_file)
+            self.filename.append(filename)
+            self.df_final = pd.concat(
+                [self.df_final, splitfile_merge_columns], axis=0)
+            self.df_final.loc[len(self.df_final.index)] = [title, self.entry_counter, len(
+                self.stats['descriptions']['nonredundant_entries']), len(
+                self.stats['descriptions']['nonredundant_entries'])]
+
+            print(self.df_final)
 
 
 ##########################################################################
@@ -115,32 +138,42 @@ def main():
                            help='If set, print the total number of rows in the input file')
     argparser.add_argument('files', type=str, nargs='+',
                            help='Filename of the FASTA file to read')
-    argparser.add_argument('matrix build', type=int, nargs='+',
-                           help='Enter a number larger than 3')
+
+  #  argparser.add_argument('matrix build', type=int, nargs='+',
+  #                         help='Enter a number larger than 3')
 
     args = argparser.parse_args()
     print(args.show_duplicate_sequences)
+    matrix = FastaStats()
+    matrix.read(args.files[1])
+    matrix.parse_files_argument(args.files)
+    print(matrix.df_final)
 
-    file1_fasta_stats = FastaStats()
-    filename_a = args.files[0]
-    file1_fasta_stats.read(filename_a)
-    file1_fasta_stats.print_stats()
 
+# return
+'''
+    for i in range(0, len(args.files)):
+        file_fasta_stats = FastaStats()
+        filename_a = args.files[i]
+        file_fasta_stats.read(filename_a)
+        values = file_fasta_stats.print_stats()
+        matrix.df_final.at[i, "Sequences"] = values[0]
+        matrix.df_final.at[i, "Unique"] = values[1]
+'''
+
+'''
     file2_fasta_stats = FastaStats()
     filename_b = args.files[1]
     file2_fasta_stats.read(filename_b)
     file2_fasta_stats.print_stats()
+'''
+'''
+for i in range(0, ):
+    for j in range(i, ):
+        file2_fasta_stats = FastaStats()
+        file2_fasta_stats.compare_stats(
+            file1_fasta_stats, file2_fasta_stats, "sequences")
 
-    file1_fasta_stats.compare_stats(
-        file1_fasta_stats, file2_fasta_stats, "sequences")
-    file1_fasta_stats.compare_stats(
-        file1_fasta_stats, file2_fasta_stats, "descriptions")
-    file1_fasta_stats.compare_stats(
-        file1_fasta_stats, file2_fasta_stats, "identifiers")
-
-    final_pandas = FastaStats()
-    print(final_pandas.df_final)
-
-
+'''
 if __name__ == "__main__":
     main()
