@@ -6,6 +6,7 @@
 
 from Bio import SeqIO
 import numpy as np
+import pandas as pd
 import argparse
 
 class Matrix:
@@ -92,7 +93,7 @@ class Matrix:
 
         # add title of each input file to first_row
         for file_entry in self.split_files:
-            first_row.append(file_entry["title"])
+            first_row.append("  " + file_entry["title"])
 
         # add first row to matrix
         matrix.append(first_row)
@@ -141,7 +142,15 @@ class Matrix:
                 # updating matrix with overlap
                 matrix[i][j + 3] = overlap
     
-        print(np.matrix(matrix))
+        column = []
+        df = pd.DataFrame(matrix)
+        for i in range (0, self.COUNT + 3):
+            for row in matrix:
+                column.append(row[i])
+            df[str(i)] = column
+        df.style
+        
+        # print(np.matrix(matrix))
 
 ##########################################################################
 
@@ -171,11 +180,5 @@ def main():
     # update matrix with actual values
     master_table.update_matrix(matrix)
 
-
 if __name__ == "__main__":
     main()
-
-'''
-Command Line Input:
-python fasta_matrix_ML.py Araport11=C:\Users\jli\SeqFiles\arabidopsis\Araport11.fasta TAIR10=C:\Users\jli\SeqFiles\arabidopsis\TAIR10.fasta UniProtKB=C:\Users\jli\SeqFiles\arabidopsis\UniProtKB.fasta RefSeq=C:\Users\jli\SeqFiles\arabidopsis\RefSeq.fasta ARA-PEP:LW=C:\Users\jli\SeqFiles\arabidopsis\ARA-PEP-LW.fasta ARA-PEP:SIPs=C:\Users\jli\SeqFiles\arabidopsis\ARA-PEP-SIPs.fasta ARA-PEP:sORFs=C:\Users\jli\SeqFiles\arabidopsis\ARA-PEP-sORFs.fasta IowaORFs=C:\Users\jli\SeqFiles\arabidopsis\IowaORFs.fasta
-'''
