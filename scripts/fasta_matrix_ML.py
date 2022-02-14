@@ -142,15 +142,9 @@ class Matrix:
                 # updating matrix with overlap
                 matrix[i][j + 3] = overlap
     
-        column = []
-        df = pd.DataFrame(matrix)
-        for i in range (0, self.COUNT + 3):
-            for row in matrix:
-                column.append(row[i])
-            df[str(i)] = column
-        df.style
-        
-        # print(np.matrix(matrix))
+        # pretty print matrix results in organized table
+        df = pd.DataFrame(matrix[1:], columns = matrix[0])
+        print(df)
 
 ##########################################################################
 
