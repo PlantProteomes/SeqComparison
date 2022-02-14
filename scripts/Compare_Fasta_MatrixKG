@@ -4,22 +4,26 @@ from fileinput import filename
 import re
 from tabnanny import filename_only
 from tkinter.tix import COLUMN
+from turtle import update
 from typing import Sequence  # refers to regular expressions module
 from Bio import SeqIO
 import json
 import argparse
+from numpy import matrix
 import pandas as pd
 
 
 class FastaStats:
 
     def __init__(self):
-
+        self.comparenums = []
         self.entry_counter = 0
+        self.entry_counter_list = []
         self.stats = {}
         self.df_final = pd.DataFrame(columns=["Source", "Sequences", "Unique"])
         self.split_files = []
         self.filename = []
+        self.titlenames = []
         for data_type in ['identifiers', 'sequences', 'descriptions']:
             self.stats[data_type] = {
                 'n_redundant_entries': 0,
@@ -63,6 +67,7 @@ class FastaStats:
                     print(
                         f"ERROR: Unable to parse description line: {record.description}")
                     exit()
+            self.entry_counter_list = [self.entry_counter]
 
     def print_stats(self):
 
@@ -92,13 +97,13 @@ class FastaStats:
                 common_pairs[key] = True
 
        # self.df_final.append((len(common_pairs))
-
+        self.comparenums.append(str(len(common_pairs)))
         print("There are", len(common_pairs), "same",
               data_type, "between the 2 files")
 
     def parse_files_argument(self, files):
         print("Parsing input title=filename arguments")
-
+        update_row_counter = 1
         self.split_files = []
         for title_file in files:
             try:
@@ -111,13 +116,18 @@ class FastaStats:
             splitfile_merge_columns = pd.DataFrame(columns=[title])
             self.split_files.append(split_file)
             self.filename.append(filename)
+            self.titlenames.append(title)
             self.df_final = pd.concat(
                 [self.df_final, splitfile_merge_columns], axis=0)
-            self.df_final.loc[len(self.df_final.index)] = [title, self.entry_counter, len(
-                self.stats['descriptions']['nonredundant_entries']), len(
-                self.stats['descriptions']['nonredundant_entries'])]
 
-            print(self.df_final)
+    def add_rows(self, files):
+        update_row_counter = 1
+
+        for i in range(len(self.filename)):
+
+            self.df_final.loc[len(self.df_final.index)] = [self.titlenames[i], str(self.entry_counter[i]), str(len(
+                self.stats['descriptions']['nonredundant_entries'])), str(len(
+                    self.stats['descriptions']['nonredundant_entries']))]
 
 
 ##########################################################################
@@ -144,36 +154,17 @@ def main():
 
     args = argparser.parse_args()
     print(args.show_duplicate_sequences)
+
     matrix = FastaStats()
-    matrix.read(args.files[1])
-    matrix.parse_files_argument(args.files)
+    for i in range(0, len(args.files)):
+        matrix.parse_files_argument(args.files)
+        matrix.read(matrix.filename[i])
+        matrix.add_rows(matrix.filename[i])
+
     print(matrix.df_final)
 
-
 # return
-'''
-    for i in range(0, len(args.files)):
-        file_fasta_stats = FastaStats()
-        filename_a = args.files[i]
-        file_fasta_stats.read(filename_a)
-        values = file_fasta_stats.print_stats()
-        matrix.df_final.at[i, "Sequences"] = values[0]
-        matrix.df_final.at[i, "Unique"] = values[1]
-'''
 
-'''
-    file2_fasta_stats = FastaStats()
-    filename_b = args.files[1]
-    file2_fasta_stats.read(filename_b)
-    file2_fasta_stats.print_stats()
-'''
-'''
-for i in range(0, ):
-    for j in range(i, ):
-        file2_fasta_stats = FastaStats()
-        file2_fasta_stats.compare_stats(
-            file1_fasta_stats, file2_fasta_stats, "sequences")
 
-'''
 if __name__ == "__main__":
     main()
