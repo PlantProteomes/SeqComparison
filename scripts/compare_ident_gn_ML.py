@@ -28,15 +28,22 @@ class Compare_Ident:
                     identifier = match.group(1)
                     description = match.group(2)
 
-                    # finding gene name for comparison
+                    # finding gene name for comparison for
+                    # the entries that have gene name
                     split = description.split(' GN=')
                     if len(split) > 1:
                         second_half = split[1]
                         split2 = second_half.split(' ')
                         gene_name = split2[0]
-                        # assuming each gene name has unique identifier
-                        # pair identifier with gene name
-                        self.gn[gene_name] = identifier
+
+                        # pair gene name with identifier
+                        if gene_name not in self.gn:
+                            all_ident = []
+                            all_ident.append(identifier)
+                            self.gn[gene_name] = all_ident
+                        else:
+                            self.gn[gene_name].append(identifier)
+
                     else:
                         self.frag.append(description)
                 else:
@@ -48,16 +55,26 @@ class Compare_Ident:
     # compares gene names between two input files and print identifiers
     # unique to the UP file 
     def compare_ident(self, UP_dict, SP_dict):
-        count = 0
+        ident_count = 0
         print("Here are the identifiers that are unique to the UP file:")
+        print("")
+
         for gene_name in list(UP_dict):
             if gene_name in SP_dict:
                 del UP_dict[gene_name]
             else:
-                print(UP_dict[gene_name])
-                count += 1
+                # print(len(UP_dict[gene_name]))
+                max = 0
+                longest = ""
+                for identifier in UP_dict[gene_name]:
+                    if len(identifier) > max:
+                        max = len(identifier)
+                        longest = identifier
+                print(longest)
+                ident_count += 1
+        
         print("")
-        print("There are " + str(count) + " identifiers unique to the UP file.")
+        print("There are " + str(ident_count) + " identifiers unique to the UP file.")
         
         
 ##########################################################################
