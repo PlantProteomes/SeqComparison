@@ -5,7 +5,7 @@ import re
 from tabnanny import filename_only
 from tkinter.tix import COLUMN
 from turtle import update
-from typing import Sequence  # refers to regular expressions module
+from typing import Sequence, final  # refers to regular expressions module
 from Bio import SeqIO
 import json
 import argparse
@@ -16,6 +16,10 @@ import pandas as pd
 class FastaStats:
 
     def __init__(self):
+        self.final_variable_row = []
+        self.zeroes = []
+        self.variable_row = []
+        self.zerocounter = 0
         self.comparenums = []
         self.entry_counter = 0
         self.entry_counter_list = []
@@ -67,7 +71,15 @@ class FastaStats:
                     print(
                         f"ERROR: Unable to parse description line: {record.description}")
                     exit()
-            self.entry_counter_list = [self.entry_counter]
+            self.entry_counter_list.append(self.entry_counter)
+
+        for i in range(self.update_row_counter):
+            self.variable_row = [self.titlenames[i], self.entry_counter, len(
+                self.stats['sequences']['nonredundant_entries'])]
+            self.variable_row.extend(self.zeroes)
+            print(self.variable_row)
+
+            self.df_final.loc[len(self.df_final.index)] = self.variable_row
 
     def print_stats(self):
 
@@ -97,13 +109,11 @@ class FastaStats:
                 common_pairs[key] = True
 
        # self.df_final.append((len(common_pairs))
-        self.comparenums.append(str(len(common_pairs)))
-        print("There are", len(common_pairs), "same",
-              data_type, "between the 2 files")
+        self.comparenums.append(len(common_pairs))
 
     def parse_files_argument(self, files):
         print("Parsing input title=filename arguments")
-        update_row_counter = 1
+        self.update_row_counter = 0
         self.split_files = []
         for title_file in files:
             try:
@@ -119,15 +129,8 @@ class FastaStats:
             self.titlenames.append(title)
             self.df_final = pd.concat(
                 [self.df_final, splitfile_merge_columns], axis=0)
-
-    def add_rows(self, files):
-        update_row_counter = 1
-
-        for i in range(len(self.filename)):
-
-            self.df_final.loc[len(self.df_final.index)] = [self.titlenames[i], str(self.entry_counter[i]), str(len(
-                self.stats['descriptions']['nonredundant_entries'])), str(len(
-                    self.stats['descriptions']['nonredundant_entries']))]
+            self.zeroes.append(0)
+            self.update_row_counter += 1
 
 
 ##########################################################################
@@ -154,14 +157,20 @@ def main():
 
     args = argparser.parse_args()
     print(args.show_duplicate_sequences)
-
     matrix = FastaStats()
-    for i in range(0, len(args.files)):
-        matrix.parse_files_argument(args.files)
+    matrix2 = FastaStats()
+    matrix.parse_files_argument(args.files)
+    matrix2.parse_files_argument(args.files)
+    matrix.final_variable_row = matrix.variable_row
+    for i in range(0, 1):
         matrix.read(matrix.filename[i])
-        matrix.add_rows(matrix.filename[i])
+        matrix2.read(matrix2.filename[i])
+     # matrix.df_final.iloc[i] = matrix.final_variable_row
+    for i in range(0, len(args.files)):
+        matrix.comparenums(matrix, matrix2, 'sequences')
 
     print(matrix.df_final)
+
 
 # return
 
