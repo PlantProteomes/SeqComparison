@@ -9,13 +9,14 @@ from typing import Sequence, final  # refers to regular expressions module
 from Bio import SeqIO
 import json
 import argparse
-from numpy import matrix
+from numpy import matrix, zeros
 import pandas as pd
 
 
 class FastaStats:
 
     def __init__(self):
+        self.seqlist = []
         self.final_variable_row = []
         self.zeroes = []
         self.variable_row = []
@@ -54,6 +55,7 @@ class FastaStats:
             # parses through records line by line
             for record in SeqIO.parse(infile, 'fasta'):
                 sequence = str(record.seq)
+                self.seqlist.append(sequence)
                 self.entry_counter += 1
 
                 # this line separates the identifier and the description into 2 groups by the space
@@ -71,15 +73,9 @@ class FastaStats:
                     print(
                         f"ERROR: Unable to parse description line: {record.description}")
                     exit()
-            self.entry_counter_list.append(self.entry_counter)
+        self.entry_counter_list.append(self.entry_counter)
 
-        for i in range(self.update_row_counter):
-            self.variable_row = [self.titlenames[i], self.entry_counter, len(
-                self.stats['sequences']['nonredundant_entries'])]
-            self.variable_row.extend(self.zeroes)
-            print(self.variable_row)
-
-            self.df_final.loc[len(self.df_final.index)] = self.variable_row
+       # self.df_final.append((len(common_pairs))
 
     def print_stats(self):
 
@@ -102,14 +98,12 @@ class FastaStats:
         return [self.entry_counter, len(
             self.stats['sequences']['nonredundant_entries'])]
 
-    def compare_stats(self, obj1, obj2, data_type):
-        common_pairs = dict()
-        for key in obj1.stats[data_type]['nonredundant_entries']:
-            if key in obj2.stats[data_type]['nonredundant_entries']:
-                common_pairs[key] = True
-
-       # self.df_final.append((len(common_pairs))
-        self.comparenums.append(len(common_pairs))
+    def compare(self, list1, list2):
+        same_seq = 0
+        for item in list1:
+            if item in list2:
+                same_seq += 1
+        self.comparenums.append(same_seq)
 
     def parse_files_argument(self, files):
         print("Parsing input title=filename arguments")
@@ -156,19 +150,35 @@ def main():
   #                         help='Enter a number larger than 3')
 
     args = argparser.parse_args()
-    print(args.show_duplicate_sequences)
+
     matrix = FastaStats()
     matrix2 = FastaStats()
     matrix.parse_files_argument(args.files)
     matrix2.parse_files_argument(args.files)
     matrix.final_variable_row = matrix.variable_row
-    for i in range(0, 1):
+    counter = 0
+    temp_list = []
+    for i in range(0, len(args.files)-1):
         matrix.read(matrix.filename[i])
-        matrix2.read(matrix2.filename[i])
-     # matrix.df_final.iloc[i] = matrix.final_variable_row
-    for i in range(0, len(args.files)):
-        matrix.comparenums(matrix, matrix2, 'sequences')
+        print(matrix.df_final)
+        matrix.variable_row = [matrix.titlenames[i], matrix.entry_counter_list[i], len(
+            matrix.stats['sequences']['nonredundant_entries'])]
 
+        for j in range(1, len(args.files)):
+            matrix2.read(matrix.filename[j])
+            matrix.compare(matrix.seqlist, matrix2.seqlist)
+            print(matrix.comparenums)
+
+        temp_list.append(None)
+        matrix.variable_row.extend(temp_list)
+        if i > 0:
+            matrix.comparenums.pop()
+        matrix.variable_row.extend(matrix.comparenums)
+
+        matrix.comparenums.clear()
+        print(matrix.variable_row)
+        matrix.df_final.loc[i] = matrix.variable_row
+        matrix.variable_row.clear()
     print(matrix.df_final)
 
 
