@@ -5,7 +5,6 @@ import re
 from tabnanny import filename_only
 from tkinter.tix import COLUMN
 from turtle import update
-from typing import Sequence, final  # refers to regular expressions module
 from Bio import SeqIO
 import json
 import argparse
@@ -75,33 +74,11 @@ class FastaStats:
                     exit()
         self.entry_counter_list.append(self.entry_counter)
 
-       # self.df_final.append((len(common_pairs))
-
-    def print_stats(self):
-
-        # printing out stats collected
-        print('')
-        print("There is a total of", self.entry_counter, "entries.")
-        print("There are", len(
-            self.stats['identifiers']['nonredundant_entries']), "unique identifiers.")
-        print("There are", len(
-            self.stats['sequences']['nonredundant_entries']), "unique sequences.")
-        print("There are", len(
-            self.stats['descriptions']['nonredundant_entries']), "unique descriptions.")
-        print("There are", self.stats['identifiers']
-              ['n_redundant_entries'], "redundant identifiers.")
-        print("There are", self.stats['sequences']
-              ['n_redundant_entries'], "redundant sequences.")
-        print("There are", self.stats['descriptions']
-              ['n_redundant_entries'], "redundant descriptions.")
-
-        return [self.entry_counter, len(
-            self.stats['sequences']['nonredundant_entries'])]
-
     def compare(self, list1, list2):
         same_seq = 0
+        dict2 = dict.fromkeys(list2, True)
         for item in list1:
-            if item in list2:
+            if item in dict2:
                 same_seq += 1
         self.comparenums.append(same_seq)
 
@@ -157,28 +134,28 @@ def main():
     matrix2.parse_files_argument(args.files)
     matrix.final_variable_row = matrix.variable_row
     counter = 0
+
     temp_list = []
-    for i in range(0, len(args.files)-1):
+    for i in range(0, len(args.files)):
         matrix.read(matrix.filename[i])
-        print(matrix.df_final)
         matrix.variable_row = [matrix.titlenames[i], matrix.entry_counter_list[i], len(
             matrix.stats['sequences']['nonredundant_entries'])]
 
-        for j in range(1, len(args.files)):
+        for j in range(i+1, len(args.files)):
             matrix2.read(matrix.filename[j])
             matrix.compare(matrix.seqlist, matrix2.seqlist)
-            print(matrix.comparenums)
+            matrix2.seqlist.clear()
 
         temp_list.append(None)
         matrix.variable_row.extend(temp_list)
-        if i > 0:
-            matrix.comparenums.pop()
+
         matrix.variable_row.extend(matrix.comparenums)
 
         matrix.comparenums.clear()
         print(matrix.variable_row)
         matrix.df_final.loc[i] = matrix.variable_row
         matrix.variable_row.clear()
+        matrix.seqlist.clear()
     print(matrix.df_final)
 
 
