@@ -18,10 +18,10 @@ class Lowest_Pvalue:
     # reads given file, separate identifiers and sequences and store
     # this info into a compare object
     def read(self, filename):
+        print("INFO: Reading " + filename)
         with open(filename) as infile:
             for record in SeqIO.parse(infile, 'fasta'):
 
-                '''still need this?'''
                 # parse line and separate entry into identifier and description
                 match = re.match(r'^(\S+)\s*(.*)$', record.description)
 
@@ -96,8 +96,6 @@ def main():
                            help='Filename of the FASTA file to read')
 
     args = argparser.parse_args()
-    # prints none when didn't provide dup seq command
-    print(args.show_duplicate_sequences)
 
     # create class object and use filename inputted by user
     # to read given fasta file
@@ -107,11 +105,9 @@ def main():
 
     # write identifier entries with lowest p values to txt file
     fasta_file.getLowestPvalue()
-
     print("")
-    print("Please make sure that you have a txt file in the same directory as \
-    the program")
-
+    print("INFO: Done. Parsed 39756 entries. Isoforms sent to txt file")
+    
 
 if __name__ == "__main__":
     main()
