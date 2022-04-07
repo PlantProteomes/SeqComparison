@@ -1,0 +1,130 @@
+import argparse
+from operator import contains
+from pickle import TRUE
+import re
+from Bio import SeqIO
+import os
+
+
+class pvalue_lowest:
+
+    def __init__(self):
+        # stores the vlaues in here
+        self.identifier = dict()
+        self.entry_counter = 0
+        self.pcounter = 0
+        self.data = dict()
+
+    def read(self, filename):
+
+        # this will open specified file
+        with open(filename) as infile:
+
+            print(f"INFO: Reading {filename}")
+
+            # parses through records line by line
+            for record in SeqIO.parse(infile, 'fasta'):
+                sequence = str(record.seq)
+                self.entry_counter += 1
+                match = re.match(r'^(\S+)\s*(.*)$', record.description)
+                if match:
+                    identifier = match.group(1)
+                    split = identifier.split('.')
+                    gene = split[0]
+                    pnum = split[1]
+
+                    # appends genes wtih multiple copies  that have P001,P002 etc.
+                    if identifier not in self.identifier:
+                        pcodes = dict()
+                        pcodes["pnum"] = pnum
+                        pcodes["desc."] = record.description
+                        pcodes["seq."] = sequence
+                        self.identifier[identifier] = pcodes
+
+                    else:
+                        if pnum < self.identifier[identifier]["pnum"]:
+                            pcodes = dict()
+                            pcodes["pnum"] = pnum
+                            pcodes["desc."] = record.description
+                            pcodes["seq."] = sequence
+                            self.identifier[identifier] = pcodes
+
+                else:
+                    print(
+                        f"ERROR: Unable to parse description line: {record.description}")
+                    exit()
+    # reads input file
+
+    def ReadIdent(self):
+        my_file = open("AraportIdentkeep.txt", "r")
+        data = my_file.read()
+        data_into_list = data.split("\n")
+        my_file.close()
+        for i in range(0, len(data_into_list)):
+            self.data[data_into_list[i]] = True
+    # removes sequences
+
+    def RemoveATCG_ATMG(self):
+        placeholder = []
+        for identifier in self.identifier:
+            if identifier.startswith("ATCG"):
+                if identifier not in self.data:
+                    placeholder.append(identifier)
+                    print("Removing Gene" + identifier)
+
+                else:
+                    print("Keeping Gene ATCG")
+            elif identifier.startswith("ATMG"):
+                if identifier.split(".")[0] not in self.data:
+                    placeholder.append(identifier)
+                    print("Removing Gene" + identifier)
+                else:
+                    print("Keeping Gene ATMG")
+        for i in range(0, len(placeholder)):
+            del self.identifier[placeholder[i]]
+
+    def createFastaPvalue(self):
+        self.fasta_filename = input("Enter a filename")
+        pfile = open(self.fasta_filename + ".fasta", "a")
+
+        for gene in self.identifier:
+
+            pfile.write(">" + self.identifier[gene]["desc."] + "\n")
+            pfile.write(self.identifier[gene]["seq."] + "\n")
+            self.pcounter += 1
+        # counts entries in file
+
+
+def main():
+
+    # Add the arguments
+    argparser = argparse.ArgumentParser(
+        description='Find duplicate identifiers, sequences, and descriptions in a FASTA file')
+    argparser.add_argument('--show_duplicate_identifiers', action='count',
+                           help='If set, print the duplicate identifiers and their count in the input file')
+    argparser.add_argument('--show_duplicate_sequences', action='count',
+                           help='If set, print the duplicate sequences and their count in the input file')
+    argparser.add_argument('--show_duplicate_descriptions', action='count',
+                           help='If set, print the duplicate descriptions and their count in the input file')
+    argparser.add_argument('--show_total_reads', action='count',
+                           help='If set, print the total number of rows in the input file')
+    argparser.add_argument('files', type=str, nargs='+',
+                           help='Filename of the FASTA file to read')
+
+    args = argparser.parse_args()
+    for i in range(0, len(args.files)):
+        fasta_file = pvalue_lowest()
+        filename = args.files[i]
+        fasta_file.ReadIdent()
+        fasta_file.read(filename)
+        fasta_file.RemoveATCG_ATMG()
+        fasta_file.createFastaPvalue()
+        print("INFO: Done. File Parsed " + str(fasta_file.entry_counter) +
+              " entries. Isoforms sent to fasta file")
+        fasta_file.identifier.clear()
+        fasta_file.entry_counter = 0
+        fasta_file.pcounter = 0
+
+
+if __name__ == "__main__":
+    main()
