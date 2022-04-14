@@ -67,20 +67,23 @@ class refined_ara_proteome:
 
             if first == "ATMG" and base not in atmg_list: 
                 self.info.pop(identifier)
+                print("DEBUG: deleted gene " + identifier)
                 atmg_count += 1
 
             elif first == "ATCG" and base not in atcg_list:
                 self.info.pop(identifier)
+                print("DEBUG: deleted gene " + identifier)
                 atcg_count += 1
 
             # seq comparison
             elif base in primaries and primaries[base] == self.info[identifier][0]:
                 if self.info[identifier][3] != "1":
                     self.info.pop(identifier)
+                    print("DEBUG: deleted gene " + identifier)
 
         # Testing
-        print("deleted atmg: " + str(atmg_count))
-        print("deleted atcg: " + str(atcg_count))
+        print("DEBUG: deleted atmg: " + str(atmg_count))
+        print("DEBUG: deleted atcg: " + str(atcg_count))
 
     # read two text files that contain info the refined proteome
     # must have. read info in to two lists
