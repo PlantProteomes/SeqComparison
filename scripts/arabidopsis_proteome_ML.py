@@ -89,7 +89,7 @@ class refined_ara_proteome:
             elif base in primaries and primaries[base] == self.info[identifier][0]:
                 if self.info[identifier][3] != "1":
                     self.info.pop(identifier)
-                    #print("DEBUG: deleted gene " + identifier)
+                    print("DEBUG: deleted gene " + identifier)
                     primaries_count += 1
 
         print("DEBUG: deleted atmg: " + str(atmg_count))
@@ -147,7 +147,7 @@ class refined_ara_proteome:
                 symbols = split_desc[1]
                 self.info[a_ident].append(symbols)
             else:
-                self.info[a_ident].append("Symbols:  ")
+                self.info[a_ident].append(" Symbols:  ")
          
 
     # format the new proteome file
