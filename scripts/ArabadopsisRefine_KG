@@ -39,15 +39,8 @@ class pvalue_lowest:
                         pcodes["pnum"] = pnum
                         pcodes["desc."] = record.description
                         pcodes["seq."] = sequence
+                        pcodes["gene"] = gene
                         self.identifier[identifier] = pcodes
-
-                    else:
-                        if pnum < self.identifier[identifier]["pnum"]:
-                            pcodes = dict()
-                            pcodes["pnum"] = pnum
-                            pcodes["desc."] = record.description
-                            pcodes["seq."] = sequence
-                            self.identifier[identifier] = pcodes
 
                 else:
                     print(
@@ -62,10 +55,13 @@ class pvalue_lowest:
         my_file.close()
         for i in range(0, len(data_into_list)):
             self.data[data_into_list[i]] = True
+
     # removes sequences
 
     def RemoveATCG_ATMG(self):
         placeholder = []
+        isoform_keep = 0
+        isoform_deleted = 0
         for identifier in self.identifier:
             if identifier.startswith("ATCG"):
                 if identifier not in self.data:
@@ -80,15 +76,49 @@ class pvalue_lowest:
                     print("Removing Gene" + identifier)
                 else:
                     print("Keeping Gene ATMG")
+
+            if self.identifier[identifier]["pnum"] > "1":
+                dotoneidentfier = self.identifier[identifier]["gene"] + ".1"
+                if dotoneidentfier in self.identifier:
+
+                    if self.identifier[identifier]["seq."] == self.identifier[dotoneidentfier]["seq."]:
+                        placeholder.append(identifier)
+                        isoform_deleted += 1
+
+                    else:
+                        isoform_keep += 1
+                else:
+                    print(".1 version does not exist" + "  " + dotoneidentfier)
+
         for i in range(0, len(placeholder)):
             del self.identifier[placeholder[i]]
+
+        print("Total isoforms kept: " + str(isoform_keep) + "\n")
+        print("Total isoforms removed: " + str(isoform_deleted))
+
+    def compare_tair(self, tair_dict):
+        for identifier in self.identifier:
+            tair_ident = "TAIR10_" + self.identifier[identifier]["gene"] + ".1"
+            Ara_split = self.identifier[identifier]["desc."].split(" ", 1)
+            if tair_ident in tair_dict:
+                split_desc = tair_dict[tair_ident]["desc."].split('|')
+               # print(split_desc)
+                symbols = split_desc[1]
+               # print(symbols)
+
+                self.identifier[identifier]["desc."] = Ara_split[0] + " |" + \
+                    symbols + Ara_split[1]
+               # print(self.identifier[identifier]["desc."])
+
+            else:
+                self.identifier[identifier]["desc."] = Ara_split[0] + " |" + \
+                    " Symbols: " + Ara_split[1]
 
     def createFastaPvalue(self):
         self.fasta_filename = input("Enter a filename")
         pfile = open(self.fasta_filename + ".fasta", "a")
 
         for gene in self.identifier:
-
             pfile.write(">" + self.identifier[gene]["desc."] + "\n")
             pfile.write(self.identifier[gene]["seq."] + "\n")
             self.pcounter += 1
@@ -118,9 +148,14 @@ def main():
         fasta_file.ReadIdent()
         fasta_file.read(filename)
         fasta_file.RemoveATCG_ATMG()
-        fasta_file.createFastaPvalue()
         print("INFO: Done. File Parsed " + str(fasta_file.entry_counter) +
               " entries. Isoforms sent to fasta file")
+        tair_filename = "C:\\Users\\kesha\\SeqComparison\\proteomes\\arabidopsis\\original\\TAIR10.fasta"
+        tair = pvalue_lowest()
+        tair.read(tair_filename)
+        fasta_file.compare_tair(tair.identifier)
+
+        fasta_file.createFastaPvalue()
         fasta_file.identifier.clear()
         fasta_file.entry_counter = 0
         fasta_file.pcounter = 0
