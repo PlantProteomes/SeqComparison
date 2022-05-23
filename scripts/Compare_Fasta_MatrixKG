@@ -24,16 +24,19 @@ class FastaStats:
         self.entry_counter = 0
         self.entry_counter_list = []
         self.stats = {}
-        self.df_final = pd.DataFrame(columns=["Source", "Sequences", "Unique"])
+        self.df_final = pd.DataFrame(
+            columns=["Source", "Sequences", "Distinct", "Unique"])
         self.split_files = []
         self.filename = []
         self.titlenames = []
+        self.redundant = 0
         for data_type in ['identifiers', 'sequences', 'descriptions']:
             self.stats[data_type] = {
                 'n_redundant_entries': 0,
                 'nonredundant_entries': {}
 
             }
+        self.unique = {}
 
     # this function updates count of redundant identifiers
 
@@ -41,6 +44,7 @@ class FastaStats:
         if value in self.stats[data_type]['nonredundant_entries']:
             self.stats[data_type]['n_redundant_entries'] += 1
             self.stats[data_type]['nonredundant_entries'][value] += 1
+            self.redundant += 1
         else:
             self.stats[data_type]['nonredundant_entries'][value] = 1
 
@@ -55,6 +59,10 @@ class FastaStats:
             for record in SeqIO.parse(infile, 'fasta'):
                 sequence = str(record.seq)
                 self.seqlist.append(sequence)
+                if sequence not in self.unique:
+                    self.unique[sequence] = dict()
+                self.unique[sequence][filename] = True
+
                 self.entry_counter += 1
 
                 # this line separates the identifier and the description into 2 groups by the space
@@ -74,13 +82,12 @@ class FastaStats:
                     exit()
         self.entry_counter_list.append(self.entry_counter)
 
-    def compare(self, list1, list2):
-        same_seq = 0
-        dict2 = dict.fromkeys(list2, True)
-        for item in list1:
-            if item in dict2:
-                same_seq += 1
-        self.comparenums.append(same_seq)
+    def unique_column(self, filename, unique):
+        unique_seq_counter = 0
+        for sequence in unique:
+            if len(unique[sequence]) == 1 and filename in unique[sequence]:
+                unique_seq_counter += 1
+        return unique_seq_counter
 
     def parse_files_argument(self, files):
         print("Parsing input title=filename arguments")
@@ -102,6 +109,14 @@ class FastaStats:
                 [self.df_final, splitfile_merge_columns], axis=0)
             self.zeroes.append(0)
             self.update_row_counter += 1
+
+    def compare(self, list1, list2):
+        same_seq = 0
+        dict2 = dict.fromkeys(list2, True)
+        for item in list1:
+            if item in dict2:
+                same_seq += 1
+        self.comparenums.append(same_seq)
 
 
 ##########################################################################
@@ -129,22 +144,28 @@ def main():
     args = argparser.parse_args()
 
     matrix = FastaStats()
-    matrix2 = FastaStats()
+
     matrix.parse_files_argument(args.files)
-    matrix2.parse_files_argument(args.files)
     matrix.final_variable_row = matrix.variable_row
     counter = 0
-
     temp_list = []
+
+# make an inital loop to read files and creater master list dictionary
+    matrix3 = FastaStats()
+    for i in range(0, len(args.files)):
+        matrix3.read(matrix.filename[i])
+
     for i in range(0, len(args.files)):
         matrix.read(matrix.filename[i])
+        n_Unique = matrix.unique_column(matrix.filename[i], matrix3.unique)
         matrix.variable_row = [matrix.titlenames[i], matrix.entry_counter_list[i], len(
-            matrix.stats['sequences']['nonredundant_entries'])]
+            matrix.stats['sequences']['nonredundant_entries']), n_Unique]
 
         for j in range(i+1, len(args.files)):
+            matrix2 = FastaStats()
             matrix2.read(matrix.filename[j])
             matrix.compare(matrix.seqlist, matrix2.seqlist)
-            matrix2.seqlist.clear()
+           # matrix2.seqlist.clear()
 
         temp_list.append(None)
         matrix.variable_row.extend(temp_list)
@@ -156,11 +177,25 @@ def main():
         matrix.df_final.loc[i] = matrix.variable_row
         matrix.variable_row.clear()
         matrix.seqlist.clear()
+        matrix.entry_counter = 0
+        matrix.stats.clear()
+        for data_type in ['identifiers', 'sequences', 'descriptions']:
+            matrix.stats[data_type] = {
+                'n_redundant_entries': 0,
+                'nonredundant_entries': {}
+
+            }
+        for data_type in ['identifiers', 'sequences', 'descriptions']:
+            matrix2.stats[data_type] = {
+                'n_redundant_entries': 0,
+                'nonredundant_entries': {}
+
+            }
+
     print(matrix.df_final)
 
 
 # return
-
 
 if __name__ == "__main__":
     main()
