@@ -1,6 +1,6 @@
 # Margaret Li
 # 1/29/22
-# This program takes n fasta files from the users that are formatted in 
+# This program takes n fasta files from the users that are formatted in
 # the title=filename format. It then constructs a matrix that stores
 # overlapping sequences from these files
 
@@ -9,12 +9,14 @@ import numpy as np
 import pandas as pd
 import argparse
 
+
 class Matrix:
-    
+
     def __init__(self):
         self.sequences = {}  # dictionary of seq with keys as seq and values as count
-        self.split_files = [] # list of dictionaries that have each contain a file's title and filename
-        self.COUNT = 0 # number of files compared
+        # list of dictionaries that have each contain a file's title and filename
+        self.split_files = []
+        self.COUNT = 0  # number of files compared
 
     # reads given file and stores sequences as keys in self.sequences and
     # of this sequence as value in the same dict
@@ -61,32 +63,33 @@ class Matrix:
 # store info of each file into a dict and add that to the self.split_files list
     def parse_files_argument(self, files):
         print("Parsing input title=filename arguments")
-        
+
         # for every file in the list, split title and file, log as dict element and append to list
         for title_file in files:
             try:
-                title,filename = title_file.split('=')
+                title, filename = title_file.split('=')
             # incase the formatting is wrong
             except:
-                print(f"ERROR: Parameter '{title_file}' should have the format TITLE=FILENAME (e.g. Mito=mitochondria.2.fasta)")
+                print(
+                    f"ERROR: Parameter '{title_file}' should have the format TITLE=FILENAME (e.g. Mito=mitochondria.2.fasta)")
                 exit(1)
 
             # store title and filename of 1 file after split
-            split_file = { "title": title, "filename": filename }
+            split_file = {"title": title, "filename": filename}
 
             # add dict format to list
             self.split_files.append(split_file)
             print(split_file)
 
         print('')
-         
+
 
 # creates a matrix used to store overlapping sequences of different
 # fasta files, total sequences, distinct sequences, and unique sequences
 # only creates template. Actual data is replaced by 0's
 # matrix template will be returned
     def create_matrix(self):
-        matrix = [] 
+        matrix = []
 
         # create unique first row with filenames and specs
         first_row = ["Source", "Sequences", "Distinct", "Unique"]
@@ -111,11 +114,9 @@ class Matrix:
 
         return matrix
 
-
   # updates the matrix template returned from create_matrix()
   # with actual overlapping values and file stats
     def update_matrix(self, matrix):
-
         # i is the row
         for i in range(1, self.COUNT + 1):
             # first file obj to be compared. Read and take stats
@@ -129,7 +130,7 @@ class Matrix:
             matrix[i][2] = stats[1]
 
             # j is the columm
-            for j in range(i + 1, self.COUNT + 1): # acounts for diagonals. start at i
+            for j in range(i + 1, self.COUNT + 1):  # acounts for diagonals. start at i
 
                 # second file obj to be compared. Read and take stats
                 file2 = Matrix()
@@ -138,18 +139,28 @@ class Matrix:
                 # compare the two files and find overlapping i/d
                 overlap = file1.compare(
                     file1.sequences, file2.sequences)
-                
+
                 # updating matrix with overlap
                 matrix[i][j + 3] = overlap
-    
+
         # pretty print matrix results in organized table
-        df = pd.DataFrame(matrix[1:], columns = matrix[0])
+        df = pd.DataFrame(matrix[1:], columns=matrix[0])
         print(df)
 
+    '''
+        # create excel writer object
+        writer = pd.ExcelWriter("arabidopsis_table.xlsx")
+        # write dataframe to excel
+        df.to_excel(writer, "arabidopsis")
+        # save the excel
+        writer.save()
+        print('DataFrame is written successfully to Excel File.')
+    '''
 ##########################################################################
 
+
 def main():
-   
+
     # Add the arguments
     argparser = argparse.ArgumentParser(
         description='Construct matrice of overlapping sequences from FASTA files')
@@ -160,12 +171,12 @@ def main():
     argparser.add_argument('--show_total_reads', action='count',
                            help='If set, print the total number of rows in the input file')
     argparser.add_argument('files', type=str, nargs='+',
-                            help='Two or more FASTA files to compare, using notation Title=filename') # NEW
+                           help='Two or more FASTA files to compare, using notation Title=filename')  # NEW
 
     args = argparser.parse_args()
 
     master_table = Matrix()
-    # parse input from users 
+    # parse input from users
     master_table.parse_files_argument(args.files)
     # update count of files inputted
     master_table.COUNT = len(master_table.split_files)
@@ -173,6 +184,7 @@ def main():
     matrix = master_table.create_matrix()
     # update matrix with actual values
     master_table.update_matrix(matrix)
+
 
 if __name__ == "__main__":
     main()
