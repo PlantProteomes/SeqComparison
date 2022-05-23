@@ -13,7 +13,7 @@ overlap and unique sequences
 ### **compare_ident_gn_ML.py**    
 Compares the UP file and the SP file with the goal    
 of identifying identifiers unique to the UP file    
-*(fix)*   
+*(Input: UP and SP filenames in the order of UP and then SP)*   
 
 ### **fasta_matrix_ML.py**   
 Generates a matrix table of file stats and seq overlaps    
