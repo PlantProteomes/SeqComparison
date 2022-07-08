@@ -18,3 +18,5 @@ curl -O -R ftp://ftp.peptideatlas.org/pub/PeptideAtlas/Proteomes/arabidopsis/ARA
 
 curl -O -R ftp://ftp.peptideatlas.org/pub/PeptideAtlas/Proteomes/arabidopsis/IowaORFs.fasta
 
+curl -O -R ftp://ftp.peptideatlas.org/pub/PeptideAtlas/Proteomes/arabidopsis/Arabidopsis_2021-04_newRNA-PEFF.fasta
+
