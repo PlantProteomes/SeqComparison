@@ -38,7 +38,7 @@ corresponding sequence to a new fasta file
 *(Input: filename)*       
 *Sample input: python lowest_pvalue_ML.py ..\proteomes\maize\Zm-B73-REFERENCE-NAM-5.0_Zm00001eb.1.protein.2.fa*
 
-### **organellar_PAextraction.py** 
+### **organellar_PAextraction_ML.py** 
 Reads Arabidopsis_2021-04_newRNA-PEFF.fasta and writes all entries beginning     
 with 'PeptideAtlas_" into a new file called PeptideAtlasNonNuclear.peff.    
 *(Input: None)* 
