@@ -1,4 +1,4 @@
-# Margaret Li
+# Margaret and Sagunya
 # 7/7/22
 # This file reads from a tsv file containing information
 # about light and dark proteins and create regular and stacked 
@@ -22,10 +22,13 @@ not_observed = df[df['status']=='not observed']
 
 ## Regular Graph ##
 
+plt.subplots(3, 2, figsize=(5, 10))
+plt.tight_layout()
+
 plt.subplot(3,2,1)
 # parameters for the graph
 min = 0
-max = 80
+max = 200
 binsize = 2
 n_bins = int( (max - min) / binsize )
 
@@ -80,9 +83,9 @@ n_bins = int((max-min)/bin_size)
 canonical_count, x_floor, patches = plt.hist( canonical_proteins['gravy'], n_bins, [min,max], label='Canonical', density=False, facecolor='g', alpha=0.5)
 dark_count, x_floor, patches = plt.hist( not_observed['gravy'], n_bins, [min,max], label='Dark', density=False, facecolor='b', alpha=0.5)
 
-plt.title(f"Distribution of Gravy")
-plt.xlabel("Gravy")
-plt.ylabel("Count")
+plt.title(f"Distribution of GRAVY")
+plt.xlabel("GRAVY")
+plt.ylabel("Proteins")
 plt.legend()
 plt.xlim(min,max)
 plt.grid(True)
@@ -100,7 +103,7 @@ plt.stairs(dark_fraction*0+1, x_floor, baseline=canonical_fraction, color='b', a
 plt.xlim(min,max)
 plt.ylim(0,1)
 plt.title(f"Proportion of canonical to dark proteins")
-plt.xlabel('Gravy')
+plt.xlabel('GRAVY')
 plt.ylabel('Ratio')
 plt.grid(True)
 
@@ -119,7 +122,7 @@ canonical_count, x_floor, patches = plt.hist( canonical_proteins['pI'], n_bins, 
 dark_count, x_floor, patches = plt.hist( not_observed['pI'], n_bins, [min,max], label='Dark', density=False, facecolor='b', alpha=0.5)
 
 plt.xlabel("pI")
-plt.ylabel("Count")
+plt.ylabel("Proteins")
 plt.grid(True)
 plt.legend()
 plt.title(f"Distribution of pI")
@@ -138,13 +141,11 @@ plt.stairs(dark_fraction*0+1, x_floor, baseline=canonical_fraction, color='b', a
 plt.xlim(min,max)
 plt.ylim(0,1)
 plt.title(f"Proportion of canonical to dark proteins")
-plt.xlabel('Molecular weight (kDa)')
+plt.xlabel('pI')
 plt.ylabel('Ratio')
 plt.grid(True)
 
 ## show graph ##
-plt.tight_layout()
 plt.show()
-
 
 # fix dimensions. Not so wide. nice looking on a page
