@@ -1,3 +1,50 @@
+2022-03-04
+
+Testing Keshav's code
+
+python lowest_pvalue_KG.py ..\proteomes\maize\original\Zm-B73-REFERENCE-NAM-5.0_Zm00001eb.1.protein.2.fa
+
+
+
+
+
+2022-02-22
+
+Testing Margaret's code:
+
+python lowest_pvalue_ML.py ..\proteomes\maize\original\Zm-B73-REFERENCE-NAM-5.0_Zm00001eb.1.protein.2.fa
+
+
+
+
+
+
+
+
+
+
+
+
+2022-01-19
+
+Testing Keshav's code
+
+python Compare_Fasta_MatrixKG ../proteomes/maize/original/mitochondrion.2.fasta ../proteomes/maize/original/plastid.2.fasta 3
+
+Does not create a sensible dataframe. Need to work on that.
+
+Testing Margaret's code
+
+python fasta_matrix_ML.py ../proteomes/maize/original/mitochondrion.2.fasta ../proteomes/maize/original/plastid.2.fasta 3
+
+After some fixing:
+python fasta_matrix_ML.py Mito=../proteomes/maize/original/mitochondrion.2.fasta Plastid=../proteomes/maize/original/plastid.2.fasta UniProtKB=../proteomes/maize/original/uniprot-proteome_UP000007305.2.fasta
+
+
+
+========================================================
+
+This works:
 
 python fasta_stats.py ../proteomes/maize/original/mitochondrion.2.fasta
 
@@ -18,4 +65,31 @@ There are 72539 entries
 There are 62559 distinct sequences. There are 9980 redundant sequences
 There are 72539 distinct identifiers. There are 0 redundant  identifiers
 There are 1 distinct descriptions. There are 72538 redundant descriptions
+
+but is it correct?
+
+=======
+
+python fasta_stats_ED_OOP.py
+
+This is in an experimental state. it run prints the contents of a data structure and exits
+
+=======
+
+python Compare_Fasta_KG2.py ../proteomes/maize/original/mitochondrion.2.fasta ../proteomes/maize/original/mitochondrion.2.fasta
+
+Getting an error:
+
+Traceback (most recent call last):
+  File "Compare_Fasta_KG2.py", line 9, in <module>
+    class FastaStats:
+  File "Compare_Fasta_KG2.py", line 30, in FastaStats
+    input_path = args.Stat_test
+AttributeError: 'Namespace' object has no attribute 'Stat_test'
+
+=======
+
+python Fastastats-KG2.py
+
+python Fastastats-KG2.py ../proteomes/maize/original/mitochondrion.2.fasta
 

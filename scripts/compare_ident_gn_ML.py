@@ -70,6 +70,8 @@ class Compare_Ident:
                     if len(identifier) > max:
                         max = len(identifier)
                         longest = identifier
+                parts = longest.split('|')
+                longest = parts[1]
                 print(longest)
                 ident_count += 1
         

@@ -58,6 +58,25 @@ class FastaStats:
 ##########################################################################
 def main():
 
+    # Create the parser
+    argparser = argparse.ArgumentParser(
+        description='Find duplicate identifiers, sequences, and descriptions in a FASTA file')
+
+    # Add the arguments
+    argparser.add_argument('--show_duplicate_identifiers', action='count',
+                        help='If set, print the duplicate identifiers and their count in the input file')
+    argparser.add_argument('--show_duplicate_sequences', action='count',
+                        help='If set, print the duplicate sequences and their count in the input file')
+    argparser.add_argument('--show_duplicate_descriptions', action='count',
+                        help='If set, print the duplicate descriptions and their count in the input file')
+    argparser.add_argument('--show_total_reads', action='count',
+                        help='If set, print the total number of rows in the input file')
+    argparser.add_argument('files', type=str, nargs='+',
+                        help='Filename of the FASTA file to read')
+    params = argparser.parse_args()
+
+
+
     file1_fasta_stats = FastaStats()
     filename = '../proteomes/maize/original/mitochondrion.2.fasta'
     file1_fasta_stats.read(filename)
