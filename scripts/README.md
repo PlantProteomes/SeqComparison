@@ -1,8 +1,9 @@
 # Scripts Directory - ML
-### **arabidopsis_proteome_ML.py**
+### **arabidopsis_proteome_ML(2).py**
 Creates a new arabidopsis proteome by combining elements
 from two files (araport11.fasta and tair10.fasta) and deleting  
-some features. The two files are unchanged.      
+some features. Version 2 means organellar file sequences added.   
+no original fasta files are changed.    
 *(Input: none)*
 
 ### **compare_fasta_ML2.py**       
@@ -37,6 +38,12 @@ corresponding sequence to a new fasta file
 *(Input: filename)*       
 *Sample input: python lowest_pvalue_ML.py ..\proteomes\maize\Zm-B73-REFERENCE-NAM-5.0_Zm00001eb.1.protein.2.fa*
 
+### **organellar_PAextraction.py** 
+Reads Arabidopsis_2021-04_newRNA-PEFF.fasta and writes all entries beginning     
+with 'PeptideAtlas_" into a new file called PeptideAtlasNonNuclear.peff.    
+*(Input: None)*    
 
-
-
+### **histogram_subplots_ML.py** 
+Generates a panels of histogram subplots from data from tsv file    
+light_and_dark_protein_list.tsv.    
+*(Input: None)*  
