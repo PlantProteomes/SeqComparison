@@ -1,8 +1,9 @@
 # Scripts Directory - ML
-### **arabidopsis_proteome_ML.py**
+### **arabidopsis_proteome_ML(2).py**
 Creates a new arabidopsis proteome by combining elements
 from two files (araport11.fasta and tair10.fasta) and deleting  
-some features. The two files are unchanged.      
+some features. Version 2 means organellar file sequences added.   
+no original fasta files are changed.    
 *(Input: none)*
 
 ### **compare_fasta_ML2.py**       
@@ -17,9 +18,9 @@ of identifying identifiers unique to the UP file
 *(Input: UP and SP filenames in the order of UP and then SP)*          
 *Sample input: python compare_ident_gn_ML.py "..\proteomes\human\uniprot-human-filtered-proteome_UP000005640+AND+organism__Homo+sapiens+(--.fasta" "..\proteomes\human\uniprot-human-filtered-reviewed_yes+AND+organism__Homo+sapiens+(Human)--.fasta"*
 
-### **fasta_matrix_ML.py**   
+### **fasta_matrix_ML(2).py**   
 Generates a matrix table of file stats and seq overlaps    
-between any number of files. Results read to Excel.     
+between any number of files. Version 2 reads to Excel.     
 *(Input: files in the format of "filename that would appear*   
 *on the matrix table"="filename" Ex: araport=araport11.fasta)*      
 *Sample input: python fasta_matrix_ML2.py Araport11=C:\Users\jli\SeqFiles\arabidopsis\Araport11.fasta TAIR10=C:\Users\jli\SeqFiles\arabidopsis\TAIR10.fasta Pseudogenes=C:\Users\jli\SeqFiles\arabidopsis\Pseudogenes.fasta UniProtKB=C:\Users\jli\SeqFiles\arabidopsis\UniProtKB.fasta*
@@ -37,6 +38,18 @@ corresponding sequence to a new fasta file
 *(Input: filename)*       
 *Sample input: python lowest_pvalue_ML.py ..\proteomes\maize\Zm-B73-REFERENCE-NAM-5.0_Zm00001eb.1.protein.2.fa*
 
+### **organellar_PAextraction_ML.py** 
+Reads Arabidopsis_2021-04_newRNA-PEFF.fasta and writes all entries beginning     
+with 'PeptideAtlas_" into a new file called PeptideAtlasNonNuclear.peff.    
+*(Input: None)* 
 
+### **DarkLightHistograms_ML.ipynb**
+Generates histograms from tsv file light_and_dark_protein_list.tsv    
+and plots them in cell format in an ipynb file. Source: Google   
+Colab notebook from shared drive.    
+*(Input: None)* 
 
-
+### **histogram_subplots_ML.py** 
+Generates a panels of histogram subplots from data from tsv file    
+light_and_dark_protein_list.tsv.    
+*(Input: None)*  
