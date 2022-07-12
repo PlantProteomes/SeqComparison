@@ -205,7 +205,7 @@ class Matrix:
 
 
         # create excel writer object
-        writer = pd.ExcelWriter("C:\\Users\\jli\\plantproteomes\\SeqComparison\\proteomes\\arabidopsisle.xlsx")
+        writer = pd.ExcelWriter("C:\\Users\\jli\\plantproteomes\\SeqComparison\\proteomes\\arabidopsis\\arabidopsis_table.xlsx")
         # write dataframe to excel
         df.to_excel(writer, "arabidopsis")
         # save the excels
