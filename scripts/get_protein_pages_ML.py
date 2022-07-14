@@ -1,11 +1,12 @@
 # Margaret Li
 # 7/13/22
-# Desc
+# This program takes in identifiers and webscrapes their 
+# profiles for specified information. Results are stored
+# in a dataframe and exported to excel.
 
 import requests
 from bs4 import BeautifulSoup as bs
 import pandas as pd
-pd.set_option('display.max_colwidth', 500)
 
 # lists for storing data
 statuses = []
@@ -19,7 +20,7 @@ build_id = 540
 
 # open file of identifiers
 ident_file = open(
-    'C:\\Users\\jli\\plantproteomes\\SeqComparison\\proteomes\\arabidopsis\\organellar_ATCG.txt', 'r')
+    'C:\\Users\\jli\\plantproteomes\\SeqComparison\\proteomes\\arabidopsis\\organellar_ATMG.txt', 'r')
 lines = ident_file.readlines()
 
 # iterate through each identifier and get information
@@ -36,9 +37,10 @@ for identifier in lines:
             f"ERROR returned with status {str(webpage)} identifier={identifier} build_id={build_id}")
         exit()
 
-    # find the html page (soup)
+    # create a bs object soup that stores html content
     soup = bs(webpage.content, features="html.parser")
     # print(soup)
+
 
     ## find relevant info ##
 
@@ -47,6 +49,7 @@ for identifier in lines:
     # print(line)
     status = line.b.text
     # print(line.b.text)
+    status = status.replace("Status: ", "")
     statuses.append(status)
 
     # find total observations
@@ -64,7 +67,7 @@ for identifier in lines:
         n_observations.append(psm)
 
     # find protein coverage
-    #span = soup.find_all('span', class_ = 'white_bg')
+    # span = soup.find_all('span', class_ = 'white_bg')
     pc_texts = soup.findAll('b', {'style': 'color:red;'})
     # print(pc_texts)
     for tag in pc_texts:
@@ -98,13 +101,11 @@ df['Number of Experiments'] = n_experiments
 writer = pd.ExcelWriter(
     "C:\\Users\\jli\\plantproteomes\\SeqComparison\\proteomes\\arabidopsis\\organellar_data.xlsx")
 # write dataframe to excel
-df.to_excel(writer, "chloroplast")
+df.to_excel(writer, "mitochondria")
 writer.save()
 print('DataFrame is written successfully to Excel File.')
 
 '''
 Improvements:
-- faster?
-- read directly from google sheets instead of txt
-- write to google sheets instead of to data frame and then excel
+- faster?  would dictionaries be faster?
 '''
