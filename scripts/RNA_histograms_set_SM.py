@@ -274,7 +274,6 @@ plt.show()
 
 # PANEL 3
 ### All Average TPM ###
-
 ## Regular Graph (whole range) ##
 
 plt.subplot(2,2,1)
