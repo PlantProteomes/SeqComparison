@@ -147,5 +147,3 @@ plt.grid(True)
 ## show graph ##
 plt.tight_layout()
 plt.show()
-
-# fix dimensions. Not so wide. nice looking on a page
