@@ -9,7 +9,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # read TSV file into pandas DataFrame
-df = pd.read_csv("C:\\Users\\jli\\plantproteomes\\SeqComparison\\proteomes\\arabidopsis\\light_and_dark_protein_list.tsv", sep="\t")
+df = pd.read_csv("C:\\Users\\smalhotr\\Documents\\SeqComparison\\proteomes\\arabidopsis\\light_and_dark_protein_list.tsv", sep="\t")
 
 # specify related columns
 canonical_proteins = df[df['status']=='canonical']
@@ -146,4 +146,5 @@ plt.grid(True)
 
 ## show graph ##
 plt.tight_layout()
+
 plt.show()
