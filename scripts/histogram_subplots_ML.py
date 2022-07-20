@@ -22,8 +22,7 @@ not_observed = df[df['status']=='not observed']
 
 ## Regular Graph ##
 
-plt.subplots(3, 2, figsize=(5, 10))
-plt.tight_layout()
+plt.subplots(3, 2, figsize=(4, 7.5))
 
 plt.subplot(3,2,1)
 # parameters for the graph
@@ -146,6 +145,5 @@ plt.ylabel('Ratio')
 plt.grid(True)
 
 ## show graph ##
+plt.tight_layout()
 plt.show()
-
-# fix dimensions. Not so wide. nice looking on a page
