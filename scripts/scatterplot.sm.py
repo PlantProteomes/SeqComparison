@@ -16,7 +16,7 @@ df['Spectra Searched'] = df['Spectra Searched'].astype(float)
 df["%Spectra ID'd"] = df["%Spectra ID'd"].astype(float)
 df['Distinct Peptides'] = df['Distinct Peptides'].astype(float)
 df['MS Runs'] = df['MS Runs'].astype(float)
-df['Cumulative Canonical Proteins'] = df['Cumulative Canonical Proteins'].astype(float)
+df['Distinct Canonical Proteins'] = df['Distinct Canonical Proteins'].astype(float)
 
 #changing from float to string back to float and removing % and , 
 spectra_searched = df['Spectra Searched']
@@ -49,9 +49,9 @@ print(df["Distinct Peptides"].max())
 print("MS Runs")
 print(df["MS Runs"].min())
 print(df["MS Runs"].max())
-print("Cumulative Canonical")
-print(df['Cumulative Canonical Proteins'].min())
-print(df['Cumulative Canonical Proteins'].max())
+print("Distinct Canonical")
+print(df['Distinct Canonical Proteins'].min())
+print(df['Distinct Canonical Proteins'].max())
 
   
 #panel 1 (linear)
@@ -64,8 +64,8 @@ plt.title(f"Spectra Searched vs % Spectra IDed")
 plt.xlabel('spectra searched')
 plt.ylabel(' % spectra IDed')
 plt.grid(True)
-plt.xlim(900, 60859455)
-plt.ylim(0,15)
+plt.xlim(900, 55629272)
+plt.ylim(1,75)
 
 
 #Panel 1.1 (log)
@@ -74,12 +74,12 @@ plt.xscale("log")
 #plt.yscale("log")
 
 plt.scatter(x = spectra_searched, y = spectra_ID)
-plt.title(f"Spectra Searched vs % Spectra IDed (log)")
+plt.title(f"Spectra Searched vs %Spectra IDed (log)")
 plt.xlabel('spectra searched')
 plt.ylabel(' % spectra IDed')
 #plt.grid(True)
-plt.xlim(900, 60859455)
-plt.ylim(0,15)
+plt.xlim(900,  55629272)
+plt.ylim(1,75)
 plt.show()
 
 #Panel 2
@@ -92,7 +92,7 @@ plt.title(f"Spectra Searched vs Distinct Peptides")
 plt.xlabel('spectra searched')
 plt.ylabel(' Distinct Peptides')
 plt.grid(True)
-plt.xlim(950, 60859455)
+plt.xlim(900,55629272)
 plt.ylim(10,400000)
 
 #Panel #2.1 (log)
@@ -106,36 +106,36 @@ plt.title(f"Spectra Searched vs Distinct Peptides (log)")
 plt.xlabel('spectra searched')
 plt.ylabel(' Distinct Peptides')
 #plt.grid(True)
-plt.xlim(950, 60859455)
+plt.xlim(900, 55629272)
 plt.ylim(10,400000)
 plt.show()
 
 #Panel 3
 plt.subplot(2,2,1)
 spectra_searched = df['Spectra Searched']
-cumulative_canonical_proteins = df["Cumulative Canonical Proteins"]
-plt.scatter(x = spectra_searched, y = cumulative_canonical_proteins)
+distinct_canonical_proteins = df["Distinct Canonical Proteins"]
+plt.scatter(x = spectra_searched, y = distinct_canonical_proteins)
 
 # formatting for the graph
-plt.title(f"spectra searched vs Cumulative Canonical Protiens")
+plt.title(f"spectra searched vs Distinct Canonical Protiens")
 plt.xlabel('spectra searched')
-plt.ylabel(' Cumulative Canonical Protiens')
+plt.ylabel('Distinct Canonical Protiens')
 plt.grid(True)
-plt.xlim(970, 60859455)
-plt.ylim(0, 5000)
+plt.xlim(900,55629272)
+plt.ylim(0,25000)
 
 #Panel 3.1 (log)
 plt.subplot(2,2,2)
 plt.xscale("log")
 plt.yscale("log")
 
-plt.scatter(x = spectra_searched, y = cumulative_canonical_proteins)
-plt.title(f"spectra searched vs Cumulative Canonical Protiens (log)")
+plt.scatter(x = spectra_searched, y = distinct_canonical_proteins)
+plt.title(f"spectra searched vs Distinct Canonical Protiens (log)")
 plt.xlabel('spectra searched')
-plt.ylabel(' Cumulative Canonical Protiens')
+plt.ylabel(' Distinct Canonical Protiens')
 #plt.grid(True)
-plt.xlim(970, 60859455)
-plt.ylim(0, 5000)
+plt.xlim(900,55629272)
+plt.ylim(0, 25000)
 plt.show()
 
 #Panel 4
@@ -151,8 +151,8 @@ plt.xlabel('spectra searched')
 plt.ylabel('MS Runs')
 plt.grid(True)
 
-plt.xlim(970, 60859455)
-plt.ylim(0,2000)
+plt.xlim(900,55629272)
+plt.ylim(1,2000)
 
 #Panel 4.1 (log)
 plt.subplot(2,2,2)
@@ -166,7 +166,7 @@ plt.xlabel('spectra searched')
 plt.ylabel('MS Runs')
 #plt.grid(True)
 plt.xlim(970, 60859455)
-plt.ylim(0,2000)
+plt.ylim(1,2000)
 
 plt.show()
 
@@ -178,12 +178,12 @@ spectra_IDed = df["%Spectra ID'd"]
 plt.scatter(x =spectra_IDed, y = Distinct_Peptides)
 
 # formatting for the graph
-plt.title(f"Spectra Searched vs Distinct Peptides")
-plt.xlabel('spectra IDed')
+plt.title(f"%Spectra IDed vs Distinct Peptides")
+plt.xlabel('%Spectra IDed')
 plt.ylabel('Distinct Peptides')
 plt.grid(True)
-plt.xlim(0,15)
-plt.ylim(0,400000)
+plt.xlim(1,75)
+plt.ylim(10,400000)
 
 #Panel 5.1 (log)
 plt.subplot(2,2,2)
@@ -191,27 +191,27 @@ plt.subplot(2,2,2)
 plt.yscale("log")
 
 plt.scatter(x =spectra_IDed, y = Distinct_Peptides)
-plt.title(f"spectra searched vs Distinct Peptides (log)")
-plt.xlabel('spectra IDed')
+plt.title(f"%Spectra IDed vs Distinct Peptides (log)")
+plt.xlabel('%spectra IDed')
 plt.ylabel('Distinct Peptides')
 #plt.grid(True)
-plt.xlim(900, 60859455)
-plt.ylim(1, 5000)
+plt.xlim(1,75)
+plt.ylim(1,400000)
 plt.show()
 
 #Panel 6
 plt.subplot(2,2,1)
-Cumulative_Canonical_Proteins = df['Cumulative Canonical Proteins']
+Distinct_Canonical_Proteins = df['Distinct Canonical Proteins']
 spectra_IDed = df["%Spectra ID'd"]
-plt.scatter(x = spectra_IDed, y = Cumulative_Canonical_Proteins)
+plt.scatter(x = spectra_IDed, y = Distinct_Canonical_Proteins)
 
 # formatting for the graph
-plt.title(f"Cumulative Canonical Proteins vs Specta IDed")
-plt.xlabel('Spectra IDed')
-plt.ylabel('Cumulative Canonical Proteins')
+plt.title(f"%Spectra IDed vs Distinct Canonical Proteins")
+plt.xlabel('%Spectra IDed')
+plt.ylabel('Distinct Canonical Proteins')
 plt.grid(True)
-plt.xlim(700,60859455)
-plt.ylim(300,19000)
+plt.xlim(1,75)
+plt.ylim(1,25000)
 
 #Panel 6.1 (log)
 plt.subplot(2,2,2)
@@ -219,16 +219,15 @@ plt.subplot(2,2,2)
 plt.yscale("log")
 
 
-plt.scatter(x = spectra_IDed, y = Cumulative_Canonical_Proteins)
+plt.scatter(x = spectra_IDed, y =Distinct_Canonical_Proteins)
 
 # formatting for the graph
-plt.title(f"Cumulative Canonical Proteins vs Specta IDed")
-plt.xlabel('Spectra IDed')
-plt.ylabel('Cumulative Canonical Proteins')
+plt.title(f"Distinct Canonical Proteins vs Specta IDed")
+plt.xlabel('%Spectra IDed')
+plt.ylabel('Distinct Canonical Proteins')
 #plt.grid(True)
-plt.xlim(700,60859455)
-plt.ylim(300,19000)
-
+plt.xlim(1,75)
+plt.ylim(1, 25000)
 
 plt.tight_layout()
 plt.show()
