@@ -20,8 +20,7 @@ df['Distinct Canonical Proteins'] = df['Distinct Canonical Proteins'].astype(flo
 df["Spectra ID'd"] = df["Spectra ID'd"].astype(float)
 
 #changing from float to string back to float and removing % and , 
-spectra_searched = df['Spectra Searched']
-spectra_ID = df["%Spectra ID'd"]
+
 
 '''
 
@@ -60,13 +59,15 @@ print(df["Spectra ID'd"].max())
   
 #panel 1 (linear)
 # parameters for the graph
+#spectra_searched = df['Spectra Searched']
+#spectra_ID = df["%Spectra ID'd"]
 plt.subplot(2,2,1)
-plt.scatter(x = spectra_searched, y = spectra_ID)
+plt.scatter(x = df['Spectra Searched'], y = df["%Spectra ID'd"])
 
 # formatting for the graph
 plt.title(f"Spectra Searched vs %Spectra IDed")
 plt.xlabel('Spectra Searched')
-plt.ylabel(' %Spectra IDed')
+plt.ylabel('%Spectra IDed')
 plt.grid(True)
 plt.xlim(900, 55629272)
 plt.ylim(1,75)
@@ -77,7 +78,7 @@ plt.subplot(2,2,2)
 plt.xscale("log")
 #plt.yscale("log")
 
-plt.scatter(x = spectra_searched, y = spectra_ID)
+plt.scatter(x = df['Spectra Searched'], y = df["%Spectra ID'd"])
 plt.title(f"Spectra Searched vs %Spectra IDed (log)")
 plt.xlabel('Spectra Searched')
 plt.ylabel(' %Spectra IDed')
@@ -87,9 +88,10 @@ plt.ylim(1,75)
 plt.show()
 
 #Panel 2
+
 plt.subplot(2,2,1)
-distinct_peptides = df["Distinct Peptides"]
-plt.scatter(x = spectra_searched, y = distinct_peptides)
+#distinct_peptides = df["Distinct Peptides"]
+plt.scatter(x = df['Spectra Searched'], y = df["Distinct Peptides"])
 
 # formatting for the graph
 plt.title(f"Spectra Searched vs Distinct Peptides")
@@ -104,7 +106,7 @@ plt.subplot(2,2,2)
 plt.xscale("log")
 plt.yscale("log")
 
-plt.scatter(x = spectra_searched, y = distinct_peptides)
+plt.scatter(x = df['Spectra Searched'], y = df["Distinct Peptides"])
 # formatting for the graph
 plt.title(f"Spectra Searched vs Distinct Peptides (log)")
 plt.xlabel('Spectra Searched')
@@ -116,9 +118,9 @@ plt.show()
 
 #Panel 3
 plt.subplot(2,2,1)
-spectra_searched = df['Spectra Searched']
-distinct_canonical_proteins = df["Distinct Canonical Proteins"]
-plt.scatter(x = spectra_searched, y = distinct_canonical_proteins)
+#spectra_searched = df['Spectra Searched']
+#distinct_canonical_proteins = df["Distinct Canonical Proteins"]
+plt.scatter(x = df['Spectra Searched'], y = df["Distinct Canonical Proteins"])
 
 # formatting for the graph
 plt.title(f"Spectra Searched vs Distinct Canonical Proteins")
@@ -133,7 +135,7 @@ plt.subplot(2,2,2)
 plt.xscale("log")
 plt.yscale("log")
 
-plt.scatter(x = spectra_searched, y = distinct_canonical_proteins)
+plt.scatter(x = df['Spectra Searched'], y = df["Distinct Canonical Proteins"])
 plt.title(f"Spectra Searched vs Distinct Canonical Proteins (log)")
 plt.xlabel('Spectra Searched')
 plt.ylabel(' Distinct Canonical Proteins')
@@ -144,9 +146,9 @@ plt.show()
 
 #Panel 4
 plt.subplot(2,2,1)
-spectra_searched = df['Spectra Searched']
-MS_Runs = df["MS Runs"]
-plt.scatter(x = spectra_searched, y = MS_Runs)
+#spectra_searched = df['Spectra Searched']
+#MS_Runs = df["MS Runs"]
+plt.scatter(x = df['Spectra Searched'], y = df["MS Runs"])
 
 
 # formatting for the graph
@@ -163,8 +165,7 @@ plt.subplot(2,2,2)
 plt.xscale("log")
 plt.yscale("log")
 
-
-plt.scatter(x = spectra_searched, y = MS_Runs)
+plt.scatter(x = df['Spectra Searched'], y = df["MS Runs"])
 plt.title(f"Spectra Searched vs MS Runs (log)")
 plt.xlabel('Spectra Searched')
 plt.ylabel('MS Runs')
@@ -176,9 +177,9 @@ plt.show()
 #Panel 5
 
 plt.subplot(2,2,1)
-spectra_searched = df["Spectra ID'd"]
-MS_Runs = df["Distinct Peptides"]
-plt.scatter(x = spectra_ID, y = distinct_peptides)
+#spectra_searched = df["Spectra ID'd"]
+#MS_Runs = df["Distinct Peptides"]
+plt.scatter(x = df["Spectra ID'd"], y = df["Distinct Peptides"])
 
 
 # formatting for the graph
@@ -187,7 +188,7 @@ plt.xlabel('Spectra IDed')
 plt.ylabel('Distinct Peptides')
 plt.grid(True)
 
-plt.xlim(1,2075)
+plt.xlim(1,20758985)
 plt.ylim(1,400000)
 
 #Panel 5.1 (log)
@@ -195,23 +196,22 @@ plt.subplot(2,2,2)
 plt.xscale("log")
 plt.yscale("log")
 
-plt.scatter(x = spectra_ID, y = distinct_peptides)
+plt.scatter(x = df["Spectra ID'd"], y = df["Distinct Peptides"])
 plt.title(f"Spectra IDed vs Distinct Peptides")
 plt.xlabel('Spectra IDed')
 plt.ylabel('Distinct Peptides')
 plt.grid(True)
 #plt.grid(True)
-plt.xlim(1,2075)
+plt.xlim(1,20758985)
 plt.ylim(1,400000)
-
 plt.show()
 
 #Panel 6
 
 plt.subplot(2,2,1)
-Distinct_Peptides = df['Distinct Peptides']
-spectra_IDed = df["%Spectra ID'd"]
-plt.scatter(x =spectra_IDed, y = Distinct_Peptides)
+#Distinct_Peptides = df['Distinct Peptides']
+#spectra_IDed = df["%Spectra ID'd"]
+plt.scatter(x = df["%Spectra ID'd"], y = df['Distinct Peptides'])
 
 # formatting for the graph
 plt.title(f"%Spectra IDed vs Distinct Peptides")
@@ -226,7 +226,7 @@ plt.subplot(2,2,2)
 #plt.xscale("log")
 plt.yscale("log")
 
-plt.scatter(x =spectra_IDed, y = Distinct_Peptides)
+plt.scatter(x = df["%Spectra ID'd"], y = df['Distinct Peptides'])
 plt.title(f"%Spectra IDed vs Distinct Peptides (log)")
 plt.xlabel('%Spectra IDed')
 plt.ylabel('Distinct Peptides')
@@ -237,9 +237,9 @@ plt.show()
 
 #Panel 7
 plt.subplot(2,2,1)
-Distinct_Canonical_Proteins = df['Distinct Canonical Proteins']
-spectra_IDed = df["%Spectra ID'd"]
-plt.scatter(x = spectra_IDed, y = Distinct_Canonical_Proteins)
+#Distinct_Canonical_Proteins = df['Distinct Canonical Proteins']
+#spectra_IDed = df["%Spectra ID'd"]
+plt.scatter(x = df["%Spectra ID'd"], y = df['Distinct Canonical Proteins'])
 
 # formatting for the graph
 plt.title(f"%Spectra IDed vs Distinct Canonical Proteins")
@@ -255,7 +255,7 @@ plt.subplot(2,2,2)
 plt.yscale("log")
 
 
-plt.scatter(x = spectra_IDed, y =Distinct_Canonical_Proteins)
+plt.scatter(x = df["%Spectra ID'd"], y = df['Distinct Canonical Proteins'])
 
 # formatting for the graph
 plt.title(f"%Spectra IDed vs Distinct Canonical Proteins (log)")
