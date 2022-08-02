@@ -35,7 +35,7 @@ for i in range(0, len(spectra_searched)):
   spectra_searched[i] = int(entry)
 
 '''
-
+'''
 # do the min and max of each column to find the specific numbers for the range
 print("Spectra Searched")
 print(df['Spectra Searched'].min())
@@ -56,13 +56,17 @@ print("Spectra ID'd")
 print(df["Spectra ID'd"].min())
 print(df["Spectra ID'd"].max())
 
-  
+  '''
+
+'''
 #panel 1 (linear)
 # parameters for the graph
 #spectra_searched = df['Spectra Searched']
 #spectra_ID = df["%Spectra ID'd"]
 plt.subplot(2,2,1)
 plt.scatter(x = df['Spectra Searched'], y = df["%Spectra ID'd"])
+
+
 
 # formatting for the graph
 plt.title(f"Spectra Searched vs %Spectra IDed")
@@ -72,9 +76,9 @@ plt.grid(True)
 plt.xlim(900, 55629272)
 plt.ylim(1,75)
 
-
+'''
 #Panel 1.1 (log)
-plt.subplot(2,2,2)
+plt.subplot(2,2,1)
 plt.xscale("log")
 #plt.yscale("log")
 
@@ -85,10 +89,10 @@ plt.ylabel(' %Spectra IDed')
 #plt.grid(True)
 plt.xlim(900,  55629272)
 plt.ylim(1,75)
-plt.show()
+
 
 #Panel 2
-
+'''
 plt.subplot(2,2,1)
 #distinct_peptides = df["Distinct Peptides"]
 plt.scatter(x = df['Spectra Searched'], y = df["Distinct Peptides"])
@@ -100,7 +104,7 @@ plt.ylabel(' Distinct Peptides')
 plt.grid(True)
 plt.xlim(900,55629272)
 plt.ylim(10,400000)
-
+'''
 #Panel #2.1 (log)
 plt.subplot(2,2,2)
 plt.xscale("log")
@@ -114,8 +118,8 @@ plt.ylabel(' Distinct Peptides')
 #plt.grid(True)
 plt.xlim(900, 55629272)
 plt.ylim(10,400000)
-plt.show()
 
+'''
 #Panel 3
 plt.subplot(2,2,1)
 #spectra_searched = df['Spectra Searched']
@@ -129,9 +133,9 @@ plt.ylabel('Distinct Canonical Proteins')
 plt.grid(True)
 plt.xlim(900,55629272)
 plt.ylim(1,25000)
-
+'''
 #Panel 3.1 (log)
-plt.subplot(2,2,2)
+plt.subplot(2,2,3)
 plt.xscale("log")
 plt.yscale("log")
 
@@ -142,8 +146,8 @@ plt.ylabel(' Distinct Canonical Proteins')
 #plt.grid(True)
 plt.xlim(900,55629272)
 plt.ylim(1, 25000)
-plt.show()
 
+'''
 #Panel 4
 plt.subplot(2,2,1)
 #spectra_searched = df['Spectra Searched']
@@ -159,9 +163,9 @@ plt.grid(True)
 
 plt.xlim(900,55629272)
 plt.ylim(1,2000)
-
+'''
 #Panel 4.1 (log)
-plt.subplot(2,2,2)
+plt.subplot(2,2,4)
 plt.xscale("log")
 plt.yscale("log")
 
@@ -174,6 +178,8 @@ plt.xlim(970, 60859455)
 plt.ylim(1,2000)
 
 plt.show()
+
+'''
 #Panel 5
 
 plt.subplot(2,2,1)
@@ -190,24 +196,21 @@ plt.grid(True)
 
 plt.xlim(1,20758985)
 plt.ylim(1,400000)
-
+'''
 #Panel 5.1 (log)
-plt.subplot(2,2,2)
+plt.subplot(2,2,1)
 plt.xscale("log")
 plt.yscale("log")
 
 plt.scatter(x = df["Spectra ID'd"], y = df["Distinct Peptides"])
-plt.title(f"Spectra IDed vs Distinct Peptides")
+plt.title(f"Spectra IDed vs Distinct Peptides (log)")
 plt.xlabel('Spectra IDed')
 plt.ylabel('Distinct Peptides')
-plt.grid(True)
-#plt.grid(True)
 plt.xlim(1,20758985)
 plt.ylim(1,400000)
-plt.show()
 
 #Panel 6
-
+'''
 plt.subplot(2,2,1)
 #Distinct_Peptides = df['Distinct Peptides']
 #spectra_IDed = df["%Spectra ID'd"]
@@ -220,7 +223,7 @@ plt.ylabel('Distinct Peptides')
 plt.grid(True)
 plt.xlim(1,75)
 plt.ylim(10,400000)
-
+'''
 #Panel 6.1 (log)
 plt.subplot(2,2,2)
 #plt.xscale("log")
@@ -233,8 +236,8 @@ plt.ylabel('Distinct Peptides')
 #plt.grid(True)
 plt.xlim(1,75)
 plt.ylim(1,400000)
-plt.show()
 
+'''
 #Panel 7
 plt.subplot(2,2,1)
 #Distinct_Canonical_Proteins = df['Distinct Canonical Proteins']
@@ -248,9 +251,9 @@ plt.ylabel('Distinct Canonical Proteins')
 plt.grid(True)
 plt.xlim(1,75)
 plt.ylim(1,25000)
-
+''' 
 #Panel 7.1 (log)
-plt.subplot(2,2,2)
+plt.subplot(2,2,3)
 #plt.xscale("log")
 plt.yscale("log")
 
