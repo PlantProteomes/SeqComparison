@@ -1,8 +1,8 @@
 # Scripts Directory - ML
 
-Note: "Input" refers to CMD input. Please       
+***Note: "Input" refers to CMD input. Please       
 check program for the correct internal file input      
-format/directory    
+format/directory***
 
 ### **arabidopsis_proteome_ML(2).py**
 Creates a new arabidopsis proteome by combining elements
@@ -43,6 +43,10 @@ corresponding sequence to a new fasta file
 *(Input: filename)*       
 *Sample input: python lowest_pvalue_ML.py ..\proteomes\maize\Zm-B73-REFERENCE-NAM-5.0_Zm00001eb.1.protein.2.fa*
 
+***Note: start of summer internship programs***
+
+## Info Extraction
+
 ### **organellar_PAextraction_ML.py** 
 Reads Arabidopsis_2021-04_newRNA-PEFF.fasta and writes all entries beginning     
 with 'PeptideAtlas_" into a new file called PeptideAtlasNonNuclear.peff.    
@@ -52,6 +56,17 @@ with 'PeptideAtlas_" into a new file called PeptideAtlasNonNuclear.peff.
 Uses two methods (json and checking with an excel file        
 to pull publication info for a designated list of identifiers    
 *(Input: None)*   
+
+### **extract_ProteomeXchange_ML.py**
+This program gets information from specified ProteomeXchange websites    
+via json dicts and writes information there to an excel file.   
+*(Input: None)*    
+
+### **get_protein_pages_html_ML.py**
+This program takes in identifiers and webscrapes (via html) their    
+profiles for specified information. Results are stored   
+in a dataframe and exported to excel.   
+*(Input: None)*    
 
 ## Plotting Programs
 
@@ -66,6 +81,13 @@ Generates a panels of histogram subplots from data from tsv file
 light_and_dark_protein_list.tsv.    
 *(Input: None)*    
 
+### **prot_central_ara_graphs_ML.py**
+This program generates 5 plots (year, instrument, repo, and PTM
+from information from ProteinCentral. Most data is stored in the 
+imported tsv file below. Some information for the PTM graph is
+scraped from protein profiles from ProteomeXChange
+*(Input: None)* 
+
 ## All PTM Programs
 
 ### **ptm_analysis_ML.py**
@@ -79,10 +101,29 @@ Generates stats for acetyl PTM and
 specifically separate results based on PTM residue (n/K)   
 *(Input: None)* 
 
-### **peptide_mod_stats_ML2**
+### **peptide_mod_stats_ML2.py**
 This program reads all peptides of the arabidopsis     
 proteome and generates stats about how many     
 modification types there are and how many        
 residue modifications there are.      
 *(Input: None)*
 
+### **peptide_mod_percentages_ML.py**
+This program takes dictionaries of mod counts
+generated from peptides_mod_stats_ML2.py
+and generates percentages in various ways
+(documented in the program) Outputs are exported
+to excel.
+*(Input: None)*
+
+### **ptm_visuals.py**
+This program generates ptm psm visuals for       
+4 ptms based on percentage certainty.     
+*(input: None)*    
+
+### **peptides_mod_all_ML.py**
+This program generates ptm stats that requires   
+accounting for all amino acides regardless   
+if modified.   
+*(input: None)*  
+status: incomplete
