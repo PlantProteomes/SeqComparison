@@ -1,13 +1,16 @@
 # Margaret Li
 # 7/22/22
-# desc
+# This program generates 5 plots (year, instrument, repo, and PTM
+# from information from ProteinCentral. Most data is stored in the 
+# imported tsv file below. Some information for the PTM graph is
+# scraped from protein profiles from ProteomeXChange
 
 import pandas as pd
 import matplotlib.pyplot as plt
 import requests
 import json
 import os.path
-from mpl_toolkits.axes_grid1.axes_divider import make_axes_area_auto_adjustable
+# from mpl_toolkits.axes_grid1.axes_divider import make_axes_area_auto_adjustable
 
 # read TSV file into pandas DataFrame
 df = pd.read_csv("C:\\Users\\jli\\plantproteomes\\SeqComparison\\proteomes\\arabidopsis\\prot_central_all_ara.tsv", sep="\t")

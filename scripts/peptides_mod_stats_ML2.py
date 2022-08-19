@@ -48,7 +48,7 @@ while True:
     if not line:
         break
 
-    counter += 1
+    #counter += 1
     if line != "":
         #print("")
         #print(f"DEBUG: {line}")
@@ -88,35 +88,11 @@ while True:
             else:
                 amino_mod_counts[amino_mod] = 1
 
-print(f"DEBUG: counter {counter}")
+#print(f"DEBUG: counter {counter}")
 
+# write both dictionaries to a file
 dict_file = open(
     "C:\\Users\\jli\\plantproteomes\\SeqComparison\\proteomes\\arabidopsis\\PTMs\\peptide_mod_dicts_new.txt", "w")
 dict_file.write(json.dumps(amino_mod_counts))
 dict_file.write(json.dumps(mod_counts))
 print("Dictionaries successfully written to file.")
-
-'''
-questions:
-- where does the blank line come from?
-Blank line.
-26033387
-Dictionaries successfully written to file.
-
-sorting things alphanumerically
-put numbers at the end of the bars
-get the percentages for each. perhaps a table
-
-same for the second graph
-
-how many with any modification
-how many with no modification
-include in description
-
-vertical two panel plot with the graphs A, B in word doc page
-
-build 2 directory
-2 column table
-
-common denom will be the pep with any modifications
-'''
