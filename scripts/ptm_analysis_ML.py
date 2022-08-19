@@ -7,12 +7,12 @@
 import pandas as pd
 import os.path
 
-keywords = ["protein_PTM_summary_nK_Acetyl", "acetyl"]
+keywords = ["protein_PTM_summary_STY_Phospho", "phospho"]
 df_summary = pd.DataFrame()
 analysis_writer = pd.ExcelWriter(
-        "C:\\Users\\jli\\plantproteomes\\SeqComparison\\proteomes\\arabidopsis\\ptm_analysis.xlsx")
+        "C:\\Users\\jli\\plantproteomes\\SeqComparison\\proteomes\\arabidopsis\\PTMs\\ptm_analysis.xlsx")
 summary_writer = pd.ExcelWriter(
-    "C:\\Users\\jli\\plantproteomes\\SeqComparison\\proteomes\\arabidopsis\\ptm_stats.xlsx")
+    "C:\\Users\\jli\\plantproteomes\\SeqComparison\\proteomes\\arabidopsis\\PTMs\\ptm_stats.xlsx")
 
 # get statistics on a ptm file for atcg, atmg, and nuclear
 for i in range (0, 3):
@@ -28,11 +28,11 @@ for i in range (0, 3):
         col_name = "Nuclear"
 
     # if specified file no exist, make the file. Else skip to dataframe
-    if os.path.exists(f"C:\\Users\\jli\\plantproteomes\\SeqComparison\\proteomes\\arabidopsis\\{keywords[1]}_{data_type}.txt") == False:
-        with open(f"C:\\Users\\jli\\plantproteomes\\SeqComparison\\proteomes\\arabidopsis\\{keywords[0]}.txt") as ptm_file:
+    if os.path.exists(f"C:\\Users\\jli\\plantproteomes\\SeqComparison\\proteomes\\arabidopsis\\PTMs\\{keywords[1]}_{data_type}.txt") == False:
+        with open(f"C:\\Users\\jli\\plantproteomes\\SeqComparison\\proteomes\\arabidopsis\\PTMs\\{keywords[0]}.txt") as ptm_file:
             lines = ptm_file.readlines()
 
-        at_file = open("C:\\Users\\jli\\plantproteomes\\SeqComparison\\proteomes\\arabidopsis\\phospho_nuclear.txt", "w")
+        at_file = open(f"C:\\Users\\jli\\plantproteomes\\SeqComparison\\proteomes\\arabidopsis\\PTMs\\{keywords[1]}_{data_type}.txt", "w")
         at_file.write(lines[0])
     
         if data_type == "nuclear":
@@ -63,7 +63,7 @@ for i in range (0, 3):
 
     # dataframe with only at*g proteins
     df = pd.read_csv(
-        f"C:\\Users\\jli\\plantproteomes\\SeqComparison\\proteomes\\arabidopsis\\{keywords[1]}_{data_type}.txt", 
+        f"C:\\Users\\jli\\plantproteomes\\SeqComparison\\proteomes\\arabidopsis\\PTMs\\{keywords[1]}_{data_type}.txt", 
         sep="\t", index_col = False)
 
     print(f"{data_type} statistics:")
@@ -110,13 +110,12 @@ for i in range (0, 3):
     print(f'{data_type} dataframe is written successfully to Excel File.')
     print("")
 
+    if data_type == "atmg":
+         df_1p.to_excel(analysis_writer, data_type + "nobs")
+         analysis_writer.save()
+
+
 # write stats summary to excel
 df_summary.to_excel(summary_writer)
 summary_writer.save()
 print('Summary dataframe is written successfully to Excel File.')
-
-
-    
-
-# do all proteins have all four ptms?
-# nobs divided between 1 phos, 2, and 3
