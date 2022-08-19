@@ -1,4 +1,9 @@
 # Scripts Directory - ML
+
+Note: "Input" refers to CMD input. Please       
+check program for the correct internal file input      
+format/directory    
+
 ### **arabidopsis_proteome_ML(2).py**
 Creates a new arabidopsis proteome by combining elements
 from two files (araport11.fasta and tair10.fasta) and deleting  
@@ -43,6 +48,13 @@ Reads Arabidopsis_2021-04_newRNA-PEFF.fasta and writes all entries beginning
 with 'PeptideAtlas_" into a new file called PeptideAtlasNonNuclear.peff.    
 *(Input: None)* 
 
+### **check_manual_pub.py**   
+Uses two methods (json and checking with an excel file        
+to pull publication info for a designated list of identifiers    
+*(Input: None)*   
+
+## Plotting Programs
+
 ### **DarkLightHistograms_ML.ipynb**
 Generates histograms from tsv file light_and_dark_protein_list.tsv    
 and plots them in cell format in an ipynb file. Source: Google   
@@ -52,4 +64,25 @@ Colab notebook from shared drive.
 ### **histogram_subplots_ML.py** 
 Generates a panels of histogram subplots from data from tsv file    
 light_and_dark_protein_list.tsv.    
-*(Input: None)*  
+*(Input: None)*    
+
+## All PTM Programs
+
+### **ptm_analysis_ML.py**
+Takes massive ptm files, get all specified entries (ie: ATCG, ATMG, Nuclear)   
+and generates specified stats for them. Some results are sent    
+to excel files. A summary table and some analysis tables are generated.    
+*(Input: None. Update ptm info in code)*
+
+### **acetyl_analysis_ML.py**  
+Generates stats for acetyl PTM and  
+specifically separate results based on PTM residue (n/K)   
+*(Input: None)* 
+
+### **peptide_mod_stats_ML2**
+This program reads all peptides of the arabidopsis     
+proteome and generates stats about how many     
+modification types there are and how many        
+residue modifications there are.      
+*(Input: None)*
+
